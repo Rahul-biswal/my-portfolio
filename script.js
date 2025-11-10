@@ -104,7 +104,7 @@ downloadCvBtn.addEventListener('click', (e) => {
     // Simulate download process
     setTimeout(() => {
         // Replace YOUR_GOOGLE_DRIVE_FILE_ID with actual Google Drive file ID
-        const googleDriveUrl = 'https://drive.google.com/file/d/YOUR_GOOGLE_DRIVE_FILE_ID/view';
+        const googleDriveUrl = 'https://drive.google.com/file/d/1n7d59a4CFpltR-WWjDoX4-RBCaL2yfVU/view?usp=sharing';
         window.open(googleDriveUrl, '_blank');
         
         // Reset button state
