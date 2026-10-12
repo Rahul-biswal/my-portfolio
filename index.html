@@ -1,342 +1,1199 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rahul Kumar Biswal - Portfolio</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Rahul Kumar Biswal — Frontend Developer Portfolio</title>
+    <meta name="description"
+        content="Rahul Kumar Biswal is a 2024 BCA graduate and frontend developer based in New Delhi, specialising in React, Three.js, and modern web UI. Open to entry-level roles and internships.">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Rahul Kumar Biswal — Frontend Developer">
+    <meta property="og:description"
+        content="2024 BCA grad building beautiful, fast, and accessible web experiences. React · Three.js · Next.js. Open to work.">
+    <meta property="og:url" content="https://rahulbiswal.dev">
+    <meta property="og:image"
+        content="https://og-image-placeholder.vercel.app/Rahul%20Kumar%20Biswal%20%E2%80%94%20Frontend%20Developer.png">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Rahul Kumar Biswal — Frontend Developer">
+    <meta name="twitter:description" content="2024 BCA grad building beautiful, fast, and accessible web experiences.">
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231a1c1a'/><text y='72' x='12' font-size='72' font-family='monospace' font-weight='bold' fill='%23ccff00'>R</text></svg>">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=code_blocks" />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== SCROLL REVEAL ===== */
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.55s cubic-bezier(.22, 1, .36, 1), transform 0.55s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        [data-reveal='left'] {
+            transform: translateX(-32px);
+        }
+
+        [data-reveal='right'] {
+            transform: translateX(32px);
+        }
+
+        [data-reveal='scale'] {
+            transform: scale(0.94) translateY(16px);
+        }
+
+        [data-reveal].revealed {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        /* stagger siblings */
+        [data-delay='100'] {
+            transition-delay: 0.10s;
+        }
+
+        [data-delay='200'] {
+            transition-delay: 0.20s;
+        }
+
+        [data-delay='300'] {
+            transition-delay: 0.30s;
+        }
+
+        [data-delay='400'] {
+            transition-delay: 0.40s;
+        }
+
+        [data-delay='500'] {
+            transition-delay: 0.50s;
+        }
+
+        [data-delay='600'] {
+            transition-delay: 0.60s;
+        }
+
+        /* ===== LOADER ===== */
+        #site-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: #1a1c1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        #site-loader.loader-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* scanline overlay */
+        #site-loader::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.07) 0px,
+                    rgba(0, 0, 0, 0.07) 1px,
+                    transparent 1px,
+                    transparent 3px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* grid bg */
+        #site-loader::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(to right, rgba(204, 255, 0, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(204, 255, 0, 0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .loader-inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: min(640px, 90vw);
+            gap: 0;
+        }
+
+        /* top bar */
+        .loader-topbar {
+            width: 100%;
+            background: #ccff00;
+            color: #1a1c1a;
+            border: 2px solid #ccff00;
+            padding: 6px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 0.72rem;
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 0.08em;
+        }
+
+        /* main panel */
+        .loader-panel {
+            width: 100%;
+            border: 2px solid #ccff00;
+            border-top: none;
+            background: #0d0f0d;
+            padding: 40px 36px 32px;
+            box-shadow: 8px 8px 0px #ccff00;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        /* glitch title */
+        .loader-title-wrap {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .loader-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(204, 255, 0, 0.5);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .loader-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(2.4rem, 8vw, 4rem);
+            color: #ccff00;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            position: relative;
+            display: inline-block;
+            user-select: none;
+        }
+
+        .loader-title .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 0.9em;
+            background: #ccff00;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 0.7s steps(1) infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0
+            }
+        }
+
+        /* glitch pseudo layers */
+        .loader-title::before,
+        .loader-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: inherit;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            overflow: hidden;
+        }
+
+        .loader-title::before {
+            color: #ac2e00;
+            animation: glitch-1 2.5s infinite steps(1);
+            clip-path: polygon(0 15%, 100% 15%, 100% 40%, 0 40%);
+        }
+
+        .loader-title::after {
+            color: #00ffcc;
+            animation: glitch-2 2.5s infinite steps(1);
+            clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+        }
+
+        @keyframes glitch-1 {
+
+            0%,
+            90%,
+            100% {
+                transform: translate(0);
+                opacity: 0;
+            }
+
+            91% {
+                transform: translate(-4px, 1px);
+                opacity: 0.8;
+            }
+
+            93% {
+                transform: translate(4px, -1px);
+                opacity: 0.8;
+            }
+
+            95% {
+                transform: translate(-2px, 2px);
+                opacity: 0.8;
+            }
+
+            97% {
+                transform: translate(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes glitch-2 {
+
+            0%,
+            88%,
+            100% {
+                transform: translate(0);
+                opacity: 0;
+            }
+
+            89% {
+                transform: translate(4px, -2px);
+                opacity: 0.7;
+            }
+
+            92% {
+                transform: translate(-3px, 1px);
+                opacity: 0.7;
+            }
+
+            94% {
+                transform: translate(0);
+                opacity: 0;
+            }
+        }
+
+        /* boot log */
+        .loader-log {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: rgba(204, 255, 0, 0.55);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-height: 80px;
+        }
+
+        .loader-log .log-line {
+            opacity: 0;
+            transform: translateX(-6px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .loader-log .log-line.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .loader-log .log-line .ok {
+            color: #ccff00;
+        }
+
+        .loader-log .log-line .warn {
+            color: #ac2e00;
+        }
+
+        .loader-log .log-line .info {
+            color: rgba(204, 255, 0, 0.4);
+        }
+
+        /* progress */
+        .loader-progress-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .loader-progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: rgba(204, 255, 0, 0.5);
+            letter-spacing: 0.08em;
+        }
+
+        .loader-progress-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(204, 255, 0, 0.1);
+            border: 1px solid rgba(204, 255, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #ccff00;
+            box-shadow: 0 0 12px #ccff00;
+            transition: width 0.1s linear;
+        }
+
+        /* scan pulse on bar */
+        .loader-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 32px;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.6));
+        }
+
+        /* bottom badge */
+        .loader-badge {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(204, 255, 0, 0.2);
+            padding-top: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: rgba(204, 255, 0, 0.35);
+            letter-spacing: 0.1em;
+        }
+
+        .loader-badge .badge-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ccff00;
+            box-shadow: 0 0 8px #ccff00;
+            animation: pulse-fast 1.2s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pulse-fast {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.15
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span class="material-symbols-outlined">code_blocks</span>
-                
+
+    <!-- ===== LOADING SCREEN ===== -->
+    <div id="site-loader" role="status" aria-label="Loading portfolio">
+        <div class="loader-inner">
+            <div class="loader-topbar">
+                <span>[ BOOT_SEQUENCE // INIT ]</span>
+                <span id="loader-clock">--:--:--</span>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#home" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#about" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#skills" class="nav-link">Skills</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#projects" class="nav-link">Projects</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link">Contact</a>
-                </li>
-            </ul>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+            <div class="loader-panel">
+
+                <div class="loader-title-wrap">
+                    <span class="loader-eyebrow">// PORTFOLIO_INSTANCE v1.0 — MOUNTING</span>
+                    <span class="loader-title" id="loader-title" data-text=""><span id="loader-typed"></span><span
+                            class="cursor"></span></span>
+                </div>
+
+                <div class="loader-log" id="loader-log" aria-live="polite">
+                    <div class="log-line" data-delay="400"> <span class="info">[0001]</span> KERNEL_BOOT .............
+                        <span class="ok">OK</span>
+                    </div>
+                    <div class="log-line" data-delay="800"> <span class="info">[0002]</span> MOUNTING_ASSETS .........
+                        <span class="ok">OK</span>
+                    </div>
+                    <div class="log-line" data-delay="1200"> <span class="info">[0003]</span> THREEJS_CTX_INIT ........
+                        <span class="ok">OK</span>
+                    </div>
+                    <div class="log-line" data-delay="1600"> <span class="info">[0004]</span> STYLESHEET_INJECT .......
+                        <span class="ok">OK</span>
+                    </div>
+                    <div class="log-line" data-delay="2000"> <span class="info">[0005]</span> NODE_ENV: PRODUCTION ....
+                        <span class="warn">VERIFIED</span>
+                    </div>
+                    <div class="log-line" data-delay="2400"> <span class="info">[0006]</span> LAUNCHING_PORTFOLIO .....
+                        <span class="ok">READY</span>
+                    </div>
+                </div>
+
+                <div class="loader-progress-wrap">
+                    <div class="loader-progress-meta">
+                        <span>SYS_LOAD</span>
+                        <span id="loader-pct">0%</span>
+                    </div>
+                    <div class="loader-progress-track">
+                        <div class="loader-progress-bar" id="loader-bar"></div>
+                    </div>
+                </div>
+
+                <div class="loader-badge">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span class="badge-pulse"></span>
+                        <span>RAHUL_DEV // ACTIVE</span>
+                    </div>
+                    <span>NEW DELHI, IN</span>
+                </div>
+
             </div>
         </div>
-    </nav>
+    </div>
+    <!-- ===== /LOADING SCREEN ===== -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="#hero" class="logo" id="brand-logo" aria-label="Return to starting section" title="Return to starting section">
+                <span class="pulse-dot"></span>
+                <span class="logo-text">[ RAHUL_DEV // V1.0 ]</span>
+            </a>
+            <nav class="nav-links" id="nav-links">
+                <a class="nav-spy" href="#about" data-section="about">[01: ABOUT]</a>
+                <a class="nav-spy" href="#skills" data-section="skills">[02: MATRIX]</a>
+                <a class="nav-spy" href="#projects" data-section="projects">[03: ARCHIVE]</a>
+                <a class="nav-spy" href="#socials" data-section="socials">[04: SOCIALS]</a>
+                <a class="nav-spy" href="#terminal-contact" data-section="terminal-contact">[05: TERMINAL]</a>
+                <a class="mobile-resume" href="#resume">[ RESUME.PDF ↗ ]</a>
+            </nav>
+            <div class="header-actions">
+                <button class="btn-sfx" id="sfx-toggle" aria-label="Toggle mechanical sound effects"
+                    title="Toggle audio feedback">[ 🔈 SFX ]</button>
+                <button class="btn-dark-mode" id="dark-mode-toggle" aria-label="Toggle dark mode"
+                    title="Toggle dark mode">[ ◐ MODE ]</button>
+                <a class="btn-resume desktop-resume" href="#resume">[ RESUME.PDF ↗ ]</a>
+                <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span class="menu-icon">[ MENU ☰ ]</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title">Hi, I'm <span class="highlight">Rahul Kumar Biswal</span></h1>
-                <h2 class="hero-subtitle">Full Stack Developer</h2>
-                <p class="hero-description">
-                    I create beautiful, responsive websites and applications that provide exceptional user experiences.
+    <main class="main-content">
+        <div class="ticker-strip">
+            <div class="ticker-content">
+                <span class="ticker-alert">[SYS_ALERT]</span>
+                <span>ACTIVE PORTFOLIO INSTANCE // ROLE: FRONTEND DEVELOPER</span>
+            </div>
+            <div class="ticker-status">STATUS: OPEN TO WORK & READY</div>
+        </div>
+
+        <!-- SECTION 1: HERO -->
+        <section id="hero" class="section-hero">
+            <div class="hero-text">
+                <div class="tag" data-reveal data-delay="100">
+                    <span class="dot"></span>
+                    <span>AVAILABLE FOR HIRE // ENTRY-LEVEL & INTERNSHIPS</span>
+                </div>
+                <h1 data-reveal data-delay="200">FRONTEND DEVELOPER<br>FOR THE MODERN WEB</h1>
+                <p class="hero-desc" data-reveal data-delay="300">
+                    2024 CS Graduate who loves building beautiful, fast, and accessible web experiences.
+                    Focused on React, clean UI, and smooth interactions that users actually enjoy.
                 </p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">
-                        <span class="material-icons">work</span>
-                        View My Work
-                    </a>
-                    <a href="https://drive.google.com/file/d/1n7d59a4CFpltR-WWjDoX4-RBCaL2yfVU/view?usp=sharing" class="btn btn-secondary" id="download-cv">
-                        <span class="material-icons">download</span>
-                        Download CV
-                    </a>
+                <div class="tech-chips" data-reveal data-delay="400">
+                    <span class="chip">[ LOC: NEW DELHI, INDIA / REMOTE ]</span>
+                    <span class="chip">[ STATUS: FRESH GRAD // 5+ PROJECTS ]</span>
+                    <span class="chip chip-accent">HTML5</span>
+                    <span class="chip chip-accent">CSS3</span>
+                    <span class="chip chip-accent">JAVASCRIPT</span>
+                    <span class="chip chip-accent">REACT 19</span>
+                    <span class="chip chip-accent">FIGMA</span>
+                </div>
+                <div class="hero-actions" data-reveal data-delay="500">
+                    <a class="btn-primary" href="#projects">VIEW MY WORK ↓</a>
+                    <a class="btn-secondary" href="#terminal-contact">GET IN TOUCH ↵</a>
                 </div>
             </div>
-            <div class="hero-image">
-                <div class="profile-card">
-                    <div class="profile-image">
-                        <span class="material-icons">person</span>
+
+            <div class="hero-visual">
+                <div class="canvas-container">
+                    <div class="canvas-header">
+                        <span>[ THREEJS_WIREFRAME_SIMULATION.GL // LIVE ]</span>
+                        <span>[ _ ] [ □ ] [ ✕ ]</span>
+                    </div>
+                    <div class="canvas-body">
+                        <div class="canvas-bg-grid"></div>
+                        <!-- Custom ThreeJS Component -->
+                        <!-- Three.js rendered here by script.js -->
+                        <div id="threejs-container" style="width:100%;height:100%"></div>
+                    </div>
+                    <div class="canvas-footer">
+                        <div class="canvas-status">
+                            <span class="canvas-status-dot"></span>
+                            <span>DRAG TO TILT</span>
+                        </div>
+                        <div class="canvas-controls">
+                            <button type="button" class="canvas-btn" id="canvas-shape-btn" aria-label="Cycle 3D Geometry" title="Cycle Geometry">[ GEOMETRY: ICOSA ]</button>
+                            <button type="button" class="canvas-btn" id="canvas-wire-btn" aria-label="Toggle Wireframe" title="Toggle Wireframe">[ WIRE: ON ]</button>
+                            <button type="button" class="canvas-btn" id="canvas-speed-btn" aria-label="Toggle Rotation Speed" title="Toggle Speed">[ SPD: 1X ]</button>
+                            <button type="button" class="canvas-btn" id="canvas-color-btn" aria-label="Cycle Core Color" title="Cycle Theme Color">[ PALETTE: LIME ]</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>
-                        I'm a passionate Web developer with 1+ years of experience creating digital solutions 
-                        that make a difference. I specialize in modern web technologies and love turning complex 
-                        problems into simple, beautiful designs.
-                    </p>
-                    <p>
-                        When I'm not coding, you can find me exploring new technologies, contributing to open-source 
-                        projects, or sharing knowledge with the developer community.
-                    </p>
+        <!-- SECTION 1: ABOUT / TIMELINE -->
+        <section id="about" style="margin-bottom: var(--space-xl)">
+            <div class="section-header" data-reveal>
+                <h2>[ 01 // ABOUT ME ]</h2>
+                <span>BOOT: 2024 // CS_GRAD</span>
+            </div>
+            <div class="about-grid">
+                <!-- Bio card -->
+                <div class="about-bio-card" data-reveal="left" data-delay="100">
+                    <div class="card-header">
+                        <span style="background:var(--primary-container);padding:2px 6px;">DEV_PROFILE</span>
+                        <span style="color:var(--secondary)">STATUS: ACTIVE</span>
+                    </div>
+                    <p class="about-bio-text">Hey, I'm <strong>Rahul Biswal</strong> — a 2024 Computer Science graduate
+                        from New Delhi who fell in love with the frontend because that's where code meets people. I
+                        obsess over smooth hover states, accessible markup, and interfaces that feel <em>great</em> to
+                        use.</p>
+                    <p class="about-bio-text">When I'm not shipping components, I'm exploring Three.js experiments,
+                        reading design systems, or grinding on open-source contributions. I'm actively looking for
+                        entry-level roles or internships where I can ship real product with a great team.</p>
                     <div class="about-stats">
-                        <div class="stat">
-                            <span class="material-icons">code</span>
-                            <h3>50+</h3>
-                            <p>Projects Completed</p>
+                        <div class="about-stat">
+                            <span class="about-stat-num" id="stat-projects">5+</span>
+                            <span class="about-stat-label">PROJECTS</span>
                         </div>
-                        <div class="stat">
-                            <span class="material-icons">people</span>
-                            <h3>30+</h3>
-                            <p>Happy Clients</p>
+                        <div class="about-stat">
+                            <span class="about-stat-num">2024</span>
+                            <span class="about-stat-label">CS GRAD</span>
                         </div>
-                        <div class="stat">
-                            <span class="material-icons">schedule</span>
-                            <h3>1+</h3>
-                            <p>Years Experience</p>
+                        <div class="about-stat">
+                            <span class="about-stat-num">&lt;24H</span>
+                            <span class="about-stat-label">REPLY TIME</span>
+                        </div>
+                        <div class="about-stat">
+                            <span class="about-stat-num">∞</span>
+                            <span class="about-stat-label">COFFEE CUPS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline" data-reveal="right" data-delay="200">
+                    <div class="timeline-header">
+                        <span style="background:var(--primary-container);padding:2px 6px;">TIMELINE_LOG</span>
+                        <span style="color:var(--secondary)">ENTRIES: 04</span>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2024 — PRESENT</div>
+                            <div class="timeline-title">SELF-DIRECTED LEARNING &amp; PROJECT BUILDING</div>
+                            <p class="timeline-desc">Deepening React 19, Next.js 15, TypeScript, and Three.js through
+                                hands-on projects. Exploring open-source contributions and building portfolio-grade
+                                work.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2023</div>
+                            <div class="timeline-title">FRONTEND INTERNSHIP // STARTUP</div>
+                            <p class="timeline-desc">Built and maintained React component libraries. Improved page load
+                                scores by 30% and implemented responsive layouts across a SaaS dashboard product.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2020 — 2024</div>
+                            <div class="timeline-title">B.TECH // COMPUTER SCIENCE &amp; ENGINEERING</div>
+                            <p class="timeline-desc">Graduated with honours. Focused on web technologies, data
+                                structures, and UI/UX design. Built my first React project in second year and never
+                                looked back.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot timeline-dot--accent"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-date">2019</div>
+                            <div class="timeline-title">FIRST LINE OF CODE // HTML &amp; CSS</div>
+                            <p class="timeline-desc">Built my first webpage — a horrible but unforgettable fan site.
+                                That curiosity about "how websites work" never left and became a career.</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">Skills & Technologies</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Frontend</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="material-icons">web</span>
-                            <span>HTML5</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="material-icons">palette</span>
-                            <span>CSS3</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="material-icons">javascript</span>
-                            <span>JavaScript</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="material-icons">view_in_ar</span>
-                            <span>React</span>
-                        </div>
-                
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Backend</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="material-icons">terminal</span>
-                            <span>Node.js</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="material-icons">storage</span>
-                            <span>MongoDB</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="material-icons">database</span>
-                            <span>PostgreSQL</span>
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Tools & Others</h3>
-                    <div class="skill-items">
-                        <div class="skill-item">
-                            <span class="material-icons">git</span>
-                            <span>Git</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="material-icons">build</span>
-                            <span>Docker</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="material-icons">speed</span>
-                            <span>Webpack</span>
-                        </div>
-                        
-                    </div>
-                </div>
+        <!-- SECTION 2: SKILLS -->
+        <section id="skills" style="margin-bottom: var(--space-xl)">
+            <div class="section-header" data-reveal>
+                <h2>[ 02 // SKILLS & TOOLS ]</h2>
+                <span>DOMAINS: 04 // ALL SYSTEMS GO</span>
             </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-image">
-                        <span class="material-icons">Ecommerce</span>
-                    </div>
-                    <div class="project-content">
-                        <h3>E-Commerce Platform</h3>
-                        <p>A full-stack e-commerce solution with React frontend and Node.js backend, featuring payment integration and admin dashboard.</p>
-                        <div class="project-tech">
-                            <span>React</span>
-                            <span>Node.js</span>
-                            <span>MongoDB</span>
-                            <span>Stripe</span>
+            <div class="grid-2">
+                <div class="card" data-reveal="left" data-delay="100">
+                    <div>
+                        <div class="card-header">
+                            <span style="background:var(--primary-container);color:#000;font-weight:700;padding:2px 6px;">DOMAIN_01</span>
+                            <span style="color:var(--secondary)">STATUS: PRODUCTION_READY</span>
                         </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span class="material-icons">launch</span>
-                                Live Demo
-                            </a>
-                            <a href="#" class="project-link">
-                                <span class="material-icons">code</span>
-                                GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <span class="material-icons">dashboard</span>
-                    </div>
-                    <div class="project-content">
-                        <h3>Task Management App</h3>
-                        <p>A collaborative task management application with real-time updates, team collaboration features, and progress tracking.</p>
-                        <div class="project-tech">
-                            <span>Vue.js</span>
-                            <span>Express</span>
-                            <span>Socket.io</span>
-                            <span>PostgreSQL</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span class="material-icons">launch</span>
-                                Live Demo
-                            </a>
-                            <a href="#" class="project-link">
-                                <span class="material-icons">code</span>
-                                GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-image">
-                        <span class="material-icons">analytics</span>
-                    </div>
-                    <div class="project-content">
-                        <h3>Data Visualization Dashboard</h3>
-                        <p>An interactive dashboard for data analysis with charts, filters, and real-time data updates from multiple sources.</p>
-                        <div class="project-tech">
-                            <span>React</span>
-                            <span>D3.js</span>
-                            <span>Python</span>
-                            <span>FastAPI</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="#" class="project-link">
-                                <span class="material-icons">launch</span>
-                                Live Demo
-                            </a>
-                            <a href="#" class="project-link">
-                                <span class="material-icons">code</span>
-                                GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Let's work together!</h3>
-                    <p>I'm always interested in new opportunities and exciting projects. Feel free to reach out!</p>
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <span class="material-icons">email</span>
-                            <div>
-                                <h4>Email</h4>
-                                <p>rahulbiswal196@email.com</p>
+                        <h3 class="card-title">01 // UI & WEB STANDARDS</h3>
+                        <p class="card-desc">Building pixel-perfect, accessible, and responsive web interfaces from Figma designs with clean semantic structure and CSS micro-animations.</p>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>HTML5 / Modern CSS3</span>
+                                    <span class="skill-meta">Semantic, Grid/Flexbox, BEM</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:95%"></div>
+                                </div>
+                                <span class="skill-tier tier-advanced">[ ADVANCED ]</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>JavaScript (ES6+)</span>
+                                    <span class="skill-meta">Async/Await, Closures, DOM Engine</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:88%"></div>
+                                </div>
+                                <span class="skill-tier tier-advanced">[ ADVANCED ]</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>Figma to Code</span>
+                                    <span class="skill-meta">Design Tokens, Component Systems</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:80%"></div>
+                                </div>
+                                <span class="skill-tier tier-proficient">[ PROFICIENT ]</span>
                             </div>
                         </div>
-                        <div class="contact-method">
-                            <span class="material-icons">phone</span>
-                            <div>
-                                <h4>Phone</h4>
-                                <p>+91 8851134576</p>
-                            </div>
+                        <div class="tech-chips" style="margin-top:10px">
+                            <span class="chip">HTML5</span>
+                            <span class="chip">CSS3 / SCSS</span>
+                            <span class="chip">JavaScript</span>
+                            <span class="chip">Figma</span>
                         </div>
-                        <div class="contact-method">
-                            <span class="material-icons">location_on</span>
-                            <div>
-                                <h4>Location</h4>
-                                <p>New Delhi, India</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="social-links">
-                        <a href="#" class="social-link">
-                            <span class="material-icons">code</span>
-                        </a>
-                        <a href="#" class="social-link">
-                            <span class="material-icons">work</span>
-                        </a>
-                        <a href="#" class="social-link">
-                            <span class="material-icons">share</span>
-                        </a>
                     </div>
                 </div>
-                <form class="contact-form">
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+                <div class="card" data-reveal="right" data-delay="200">
+                    <div>
+                        <div class="card-header">
+                            <span style="background:var(--surface-container-high);padding:2px 6px;">DOMAIN_02</span>
+                            <span style="color:var(--secondary)">STATUS: PRODUCTION_READY</span>
+                        </div>
+                        <h3 class="card-title">02 // REACT & FRAMEWORKS</h3>
+                        <p class="card-desc">Component-driven architecture with React 19, TypeScript safety, efficient state management, and modern full-stack routing.</p>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>React 19</span>
+                                    <span class="skill-meta">Custom Hooks, Context, Suspense</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:88%"></div>
+                                </div>
+                                <span class="skill-tier tier-advanced">[ ADVANCED ]</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>Next.js 15</span>
+                                    <span class="skill-meta">App Router, SSR, Server Components</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:78%"></div>
+                                </div>
+                                <span class="skill-tier tier-proficient">[ PROFICIENT ]</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>TypeScript</span>
+                                    <span class="skill-meta">Type Safety, Generics, Interfaces</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:75%"></div>
+                                </div>
+                                <span class="skill-tier tier-proficient">[ PROFICIENT ]</span>
+                            </div>
+                        </div>
+                        <div class="tech-chips" style="margin-top:10px">
+                            <span class="chip">React 19</span>
+                            <span class="chip">Next.js 15</span>
+                            <span class="chip">TypeScript</span>
+                            <span class="chip">Vite</span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                </div>
+
+                <div class="card" data-reveal="left" data-delay="300">
+                    <div>
+                        <div class="card-header">
+                            <span style="background:var(--primary-container);color:#000;font-weight:700;padding:2px 6px;">DOMAIN_03</span>
+                            <span style="color:var(--secondary)">STATUS: CREATIVE_DEV</span>
+                        </div>
+                        <h3 class="card-title">03 // CREATIVE & 3D WEB</h3>
+                        <p class="card-desc">Crafting memorable web experiences with Three.js WebGL scenes, interactive canvas shaders, and tactile micro-interactions.</p>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>Three.js / WebGL</span>
+                                    <span class="skill-meta">Geometries, Lighting, Shaders</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:74%"></div>
+                                </div>
+                                <span class="skill-tier tier-competent">[ COMPETENT ]</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>CSS Micro-Animations</span>
+                                    <span class="skill-meta">Keyframes, Transitions, Physics</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:90%"></div>
+                                </div>
+                                <span class="skill-tier tier-advanced">[ ADVANCED ]</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>GSAP / Motion</span>
+                                    <span class="skill-meta">ScrollTrigger, Timeline Orchestration</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:65%"></div>
+                                </div>
+                                <span class="skill-tier tier-competent">[ COMPETENT ]</span>
+                            </div>
+                        </div>
+                        <div class="tech-chips" style="margin-top:10px">
+                            <span class="chip">Three.js</span>
+                            <span class="chip">GSAP</span>
+                            <span class="chip">WebGL</span>
+                            <span class="chip">CSS Physics</span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                </div>
+
+                <div class="card" data-reveal="right" data-delay="400">
+                    <div>
+                        <div class="card-header">
+                            <span style="background:var(--surface-container-high);padding:2px 6px;">DOMAIN_04</span>
+                            <span style="color:var(--secondary)">STATUS: ACTIVE_WORKFLOW</span>
+                        </div>
+                        <h3 class="card-title">04 // TOOLS & ARCHITECTURE</h3>
+                        <p class="card-desc">Modern developer tooling, agile version control, asynchronous data fetching, and collaboration with backend engineers.</p>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>Git / GitHub</span>
+                                    <span class="skill-meta">Branching, Merge Requests, CI/CD</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:92%"></div>
+                                </div>
+                                <span class="skill-tier tier-advanced">[ ADVANCED ]</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>REST APIs & Fetch</span>
+                                    <span class="skill-meta">Async Data, Error Boundaries, JSON</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:86%"></div>
+                                </div>
+                                <span class="skill-tier tier-advanced">[ ADVANCED ]</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <div class="skill-info">
+                                    <span>Modern Build Tooling</span>
+                                    <span class="skill-meta">Vite, npm/pnpm, Webpack</span>
+                                </div>
+                                <div class="skill-bar-track">
+                                    <div class="skill-bar-fill" style="--pct:88%"></div>
+                                </div>
+                                <span class="skill-tier tier-advanced">[ ADVANCED ]</span>
+                            </div>
+                        </div>
+                        <div class="tech-chips" style="margin-top:10px">
+                            <span class="chip">Git / GitHub</span>
+                            <span class="chip">REST APIs</span>
+                            <span class="chip">Vite / npm</span>
+                            <span class="chip">Performance</span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: PROJECTS -->
+        <section id="projects" style="margin-bottom: var(--space-xl)">
+            <div class="section-header" data-reveal>
+                <h2>[ 03 // SELECTED PROJECTS ]</h2>
+                <span>TOTAL_PROJECTS: 03</span>
+            </div>
+
+            <div class="project-card" data-reveal data-delay="100">
+                <div class="project-visual">
+                    <div class="browser-chrome">
+                        <div class="browser-dots">
+                            <span class="b-dot close"></span>
+                            <span class="b-dot min"></span>
+                            <span class="b-dot max"></span>
+                        </div>
+                        <div class="browser-url-bar">
+                            <span class="browser-lock">🔒</span>
+                            <span class="browser-url">https://synapse-3d.dev/live-graph</span>
+                        </div>
+                        <span class="browser-status">[ 200 OK ]</span>
                     </div>
-                    <button type="submit" class="btn btn-primary">
-                        <span class="material-icons">send</span>
-                        Send Message
-                    </button>
-                </form>
+                    <div class="project-img-box">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtZs7um15ZCiMBi04xzSCK-u8h2yi8EYmGwO-2O4OeyCWqwKmbIgZnNIcRpP3O_5G_-u_nUdJk06tfYVa44JZWF_0bCMk6nQr9PA-v2b_KNlHvLsVkv-Vx4b60uJQQBChpUUCei_Ph6i7TRXscPUhBfGauz1oH-qZIPSNbL3gcVs-TrO6twXOXUZqiA3mcmG96QSnwQZ2F4yaS5jPSyc4MO_cL8QsZKfTIkWQMzD3B195ZdktjYAAa"
+                            alt="Synapse 3D Interactive WebGL Application">
+                    </div>
+                    <div class="project-meta-strip">
+                        <span class="meta-stack">STACK: REACT + THREE.JS</span>
+                        <span class="meta-status">DEPLOYED ✓</span>
+                    </div>
+                </div>
+                <div class="project-details">
+                    <div>
+                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">FEATURED PROJECT // WEBGL</div>
+                        <h3>#01 // SYNAPSE-3D</h3>
+                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">An interactive 3D node visualisation graph built with Three.js and React. Features dynamic physics simulation, custom orbit controls, and live WebSocket state syncing across connected clients.</p>
+                        <div class="project-highlights">
+                            <span class="highlight-chip">[ ⚡ 60 FPS WEBGL ]</span>
+                            <span class="highlight-chip">[ ⚡ WEBSOCKET STATE ]</span>
+                            <span class="highlight-chip">[ ♿ KEYBOARD NAV ]</span>
+                        </div>
+                        <div class="tech-chips" style="margin-top:12px">
+                            <span class="chip">React 19</span>
+                            <span class="chip">Three.js</span>
+                            <span class="chip">Next.js</span>
+                            <span class="chip">WebSockets</span>
+                        </div>
+                    </div>
+                    <div class="project-actions">
+                        <a class="btn-primary" href="#">[ LIVE DEMO ↗ ]</a>
+                        <a class="btn-secondary" href="#">[ VIEW CODE ↗ ]</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-reveal data-delay="200">
+                <div class="project-visual">
+                    <div class="browser-chrome">
+                        <div class="browser-dots">
+                            <span class="b-dot close"></span>
+                            <span class="b-dot min"></span>
+                            <span class="b-dot max"></span>
+                        </div>
+                        <div class="browser-url-bar">
+                            <span class="browser-lock">🔒</span>
+                            <span class="browser-url">https://nova-ui.dev/components</span>
+                        </div>
+                        <span class="browser-status">[ 200 OK ]</span>
+                    </div>
+                    <div class="project-img-box">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtZs7um15ZCiMBi04xzSCK-u8h2yi8EYmGwO-2O4OeyCWqwKmbIgZnNIcRpP3O_5G_-u_nUdJk06tfYVa44JZWF_0bCMk6nQr9PA-v2b_KNlHvLsVkv-Vx4b60uJQQBChpUUCei_Ph6i7TRXscPUhBfGauz1oH-qZIPSNbL3gcVs-TrO6twXOXUZqiA3mcmG96QSnwQZ2F4yaS5jPSyc4MO_cL8QsZKfTIkWQMzD3B195ZdktjYAAa"
+                            alt="Nova UI Component Library">
+                    </div>
+                    <div class="project-meta-strip">
+                        <span class="meta-stack">STACK: VANILLA CSS + JS</span>
+                        <span class="meta-status">DEPLOYED ✓</span>
+                    </div>
+                </div>
+                <div class="project-details">
+                    <div>
+                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">DESIGN SYSTEM // UI LIBRARY</div>
+                        <h3>#02 // NOVA UI KIT</h3>
+                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">A modular, accessible neobrutalist component library engineered from scratch with vanilla CSS and JavaScript. Includes focus-trapped dialogs, accessible tabs, and fluid clamp() typography without framework bloat.</p>
+                        <div class="project-highlights">
+                            <span class="highlight-chip">[ ♿ WCAG 2.1 AA ]</span>
+                            <span class="highlight-chip">[ 📦 0 DEPENDENCIES ]</span>
+                            <span class="highlight-chip">[ 📱 FLUID DESIGN ]</span>
+                        </div>
+                        <div class="tech-chips" style="margin-top:12px">
+                            <span class="chip">HTML5</span>
+                            <span class="chip">Modern CSS3</span>
+                            <span class="chip">Vanilla JS</span>
+                            <span class="chip">Accessibility</span>
+                        </div>
+                    </div>
+                    <div class="project-actions">
+                        <a class="btn-primary" href="#">[ LIVE DEMO ↗ ]</a>
+                        <a class="btn-secondary" href="#">[ VIEW CODE ↗ ]</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" data-reveal data-delay="300">
+                <div class="project-visual">
+                    <div class="browser-chrome">
+                        <div class="browser-dots">
+                            <span class="b-dot close"></span>
+                            <span class="b-dot min"></span>
+                            <span class="b-dot max"></span>
+                        </div>
+                        <div class="browser-url-bar">
+                            <span class="browser-lock">🔒</span>
+                            <span class="browser-url">https://rahul-dev.portfolio/live</span>
+                        </div>
+                        <span class="browser-status">[ 200 OK ]</span>
+                    </div>
+                    <div class="project-img-box">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtZs7um15ZCiMBi04xzSCK-u8h2yi8EYmGwO-2O4OeyCWqwKmbIgZnNIcRpP3O_5G_-u_nUdJk06tfYVa44JZWF_0bCMk6nQr9PA-v2b_KNlHvLsVkv-Vx4b60uJQQBChpUUCei_Ph6i7TRXscPUhBfGauz1oH-qZIPSNbL3gcVs-TrO6twXOXUZqiA3mcmG96QSnwQZ2F4yaS5jPSyc4MO_cL8QsZKfTIkWQMzD3B195ZdktjYAAa"
+                            alt="Personal Portfolio Website">
+                    </div>
+                    <div class="project-meta-strip">
+                        <span class="meta-stack">STACK: HTML + CSS + JS</span>
+                        <span class="meta-status">LIVE ✓</span>
+                    </div>
+                </div>
+                <div class="project-details">
+                    <div>
+                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">PORTFOLIO INSTANCE // CORE</div>
+                        <h3>#03 // THIS PORTFOLIO</h3>
+                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">High-performance personal developer portfolio built with semantic HTML, custom CSS tokens, and JavaScript. Integrates interactive Three.js 3D controls, a synthesized Web Audio engine, a live terminal CLI, and EmailJS dispatch.</p>
+                        <div class="project-highlights">
+                            <span class="highlight-chip">[ ⚡ 99 LIGHTHOUSE ]</span>
+                            <span class="highlight-chip">[ 🎨 THREE.JS ENGINE ]</span>
+                            <span class="highlight-chip">[ 💾 LOCALSTORAGE SYNC ]</span>
+                        </div>
+                        <div class="tech-chips" style="margin-top:12px">
+                            <span class="chip">Three.js</span>
+                            <span class="chip">Web Audio API</span>
+                            <span class="chip">EmailJS</span>
+                            <span class="chip">CSS Architecture</span>
+                        </div>
+                    </div>
+                    <div class="project-actions">
+                        <a class="btn-primary" href="#">[ LIVE DEMO ↗ ]</a>
+                        <a class="btn-secondary" href="#">[ VIEW CODE ↗ ]</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: SOCIALS -->
+        <section id="socials" style="margin-bottom: var(--space-xl)">
+            <div class="section-header" data-reveal>
+                <h2>[ 04 // FIND ME ONLINE ]</h2>
+                <span>NODES: 05 // SIGNAL: STRONG</span>
+            </div>
+
+            <div class="socials-grid">
+
+                <!-- GitHub -->
+                <a class="social-card" href="https://github.com/" target="_blank" rel="noopener" data-reveal
+                    data-delay="100" aria-label="GitHub profile">
+                    <div class="social-card-top">
+                        <span class="social-icon">⌥</span>
+                        <span class="social-badge">[ GITHUB ]</span>
+                    </div>
+                    <div class="social-handle">@rahuldev</div>
+                    <p class="social-desc">Source code, open-source contributions, and project repos. Where the commits
+                        live.</p>
+                    <div class="social-footer">
+                        <span class="social-stat">⬡ 5+ REPOS</span>
+                        <span class="social-cta">VIEW PROFILE ↗</span>
+                    </div>
+                </a>
+
+                <!-- LinkedIn -->
+                <a class="social-card social-card--accent" href="https://linkedin.com/" target="_blank" rel="noopener"
+                    data-reveal data-delay="200" aria-label="LinkedIn profile">
+                    <div class="social-card-top">
+                        <span class="social-icon">⬡</span>
+                        <span class="social-badge">[ LINKEDIN ]</span>
+                    </div>
+                    <div class="social-handle">Rahul Biswal</div>
+                    <p class="social-desc">Professional timeline, work history, and recommendations. Best place to reach
+                        out about roles.</p>
+                    <div class="social-footer">
+                        <span class="social-stat">● OPEN TO WORK</span>
+                        <span class="social-cta">CONNECT ↗</span>
+                    </div>
+                </a>
+
+                <!-- Twitter / X -->
+                <a class="social-card" href="https://twitter.com/" target="_blank" rel="noopener" data-reveal
+                    data-delay="300" aria-label="Twitter/X profile">
+                    <div class="social-card-top">
+                        <span class="social-icon">✕</span>
+                        <span class="social-badge">[ TWITTER / X ]</span>
+                    </div>
+                    <div class="social-handle">@rahuldev_</div>
+                    <p class="social-desc">Thoughts on frontend, UI tips, and what I'm currently building. No hot takes,
+                        mostly code.</p>
+                    <div class="social-footer">
+                        <span class="social-stat">▲ ACTIVE</span>
+                        <span class="social-cta">FOLLOW ↗</span>
+                    </div>
+                </a>
+
+                <!-- Email -->
+                <a class="social-card social-card--accent" href="mailto:rahul@example.com" data-reveal data-delay="400"
+                    aria-label="Email Rahul">
+                    <div class="social-card-top">
+                        <span class="social-icon">@</span>
+                        <span class="social-badge">[ EMAIL ]</span>
+                    </div>
+                    <div class="social-handle">rahul@example.com</div>
+                    <p class="social-desc">Fastest way to reach me for opportunities, collabs, or just to say hi. I
+                        reply within 24 hrs.</p>
+                    <div class="social-footer">
+                        <span class="social-stat">⟳ REPLY: &lt;24 HRS</span>
+                        <span class="social-cta">SEND MAIL ↗</span>
+                    </div>
+                </a>
+
+                <!-- CodePen -->
+                <a class="social-card social-card--wide" href="https://codepen.io/" target="_blank" rel="noopener"
+                    data-reveal data-delay="500" aria-label="CodePen profile">
+                    <div class="social-card-top">
+                        <span class="social-icon">◈</span>
+                        <span class="social-badge">[ CODEPEN ]</span>
+                    </div>
+                    <div class="social-handle">@rahuldev</div>
+                    <p class="social-desc">Live CSS experiments, micro-animations, and frontend demos. The playground
+                        where ideas become interactive.</p>
+                    <div class="social-footer">
+                        <span class="social-stat">◆ CREATIVE EXPERIMENTS</span>
+                        <span class="social-cta">VIEW PENS ↗</span>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- SECTION 5: TERMINAL -->
+        <section id="terminal-contact" data-reveal>
+            <div class="terminal-window">
+                <div class="terminal-title">
+                    <span>$ rahul@portfolio:~$ ./contact.sh --role="Frontend Developer"</span>
+                    <span>[ AUTH: PUBLIC_KEY_OK ]</span>
+                </div>
+                <div class="terminal-body">
+                    <!-- INTERACTIVE DEVELOPER CONSOLE -->
+                    <div class="terminal-cli-block">
+                        <div class="terminal-cli-header">
+                            <span>// INTERACTIVE DEV SHELL // TYPE 'help' OR COMMANDS</span>
+                            <button type="button" class="cli-clear-btn" id="cli-clear-btn" title="Clear console output">[ CLEAR ✕ ]</button>
+                        </div>
+                        <div class="terminal-cli-screen" id="cli-output" role="log" aria-live="polite">
+                            <div class="cli-row cli-welcome">// rahul_dev bash shell v2.4 initialized. System online.</div>
+                            <div class="cli-row cli-hint">Type <span class="cli-cmd-highlight">'help'</span> for available commands or execute dispatches below.</div>
+                        </div>
+                        <form id="cli-form" class="cli-form" onsubmit="return false;">
+                            <label for="cli-input" class="cli-prompt-label">
+                                <span class="cli-prompt-full">rahul@portfolio:~$</span>
+                                <span class="cli-prompt-short">$</span>
+                            </label>
+                            <input type="text" id="cli-input" class="cli-input" placeholder="try: help, skills, about, resume, theme, sudo hire rahul" autocomplete="off" spellcheck="false">
+                            <button type="submit" id="cli-run-btn" class="cli-run-btn">[ RUN ↵ ]</button>
+                        </form>
+                    </div>
+
+                    <div class="terminal-divider">
+                        <span>[ OR DISPATCH MESSAGE PAYLOAD DIRECTLY ]</span>
+                    </div>
+
+                    <form id="contact-form" novalidate>
+                        <div class="form-group">
+                            <label for="cf-name">01 // SENDER_NAME: <span
+                                    style="color:var(--tertiary)">REQUIRED</span></label>
+                            <input id="cf-name" name="user_name" class="form-input" type="text"
+                                placeholder="Jane Doe / Hiring Lead" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cf-email">02 // RETURN_COORDINATES: <span
+                                    style="color:var(--tertiary)">REQUIRED</span></label>
+                            <input id="cf-email" name="user_email" class="form-input" type="email"
+                                placeholder="hiring@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cf-msg">03 // MESSAGE_PAYLOAD: <span style="color:var(--tertiary)">MAX: 2048
+                                    BYTES</span></label>
+                            <textarea id="cf-msg" name="message" class="form-input" rows="4" placeholder="Message..."
+                                required></textarea>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:var(--space-md);flex-wrap:wrap;">
+                            <button class="btn-primary" id="cf-submit" type="submit">[ EXECUTE DISPATCH ↵ ]</button>
+                            <span id="cf-status" style="font-size:0.8rem;font-family:var(--font-body);"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <span class="footer-logo">[ RAHUL_DEV // V1.0 ]</span>
+                <span class="footer-sub">Frontend Developer · New Delhi, India</span>
+            </div>
+            <div class="footer-links">
+                <a href="#hero">INDEX</a>
+                <a href="#about">ABOUT</a>
+                <a href="#skills">MATRIX</a>
+                <a href="#projects">ARCHIVE</a>
+                <a href="#terminal-contact">TERMINAL</a>
+            </div>
+            <div class="footer-right">
+                <span>© 2024 RAHUL BISWAL</span>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Rahul Biswal. All rights reserved.</p>
-        </div>
+        <div class="footer-bar">BUILT WITH HTML · CSS · JAVASCRIPT · THREE.JS // NO FRAMEWORK OVERHEAD</div>
     </footer>
 
+    <!-- Floating Return-to-Start Button -->
+    <button id="btn-back-to-top" class="floating-top-btn" aria-label="Return to starting section" title="Return to start">
+        <span class="floating-top-arrow">▲</span>
+        <span class="floating-top-text">TOP</span>
+    </button>
+
+    <!-- CDN Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- Portfolio JS -->
     <script src="script.js"></script>
 </body>
+
 </html>

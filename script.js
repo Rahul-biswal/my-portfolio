@@ -1,382 +1,679 @@
-// DOM Elements
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const navLinks = document.querySelectorAll('.nav-link');
-const downloadCvBtn = document.getElementById('download-cv');
-const contactForm = document.querySelector('.contact-form');
+/* ============================================================
+   RAHUL_DEV PORTFOLIO — script.js
+   All JavaScript for the portfolio. Loaded after EmailJS CDN.
+   ============================================================ */
 
-// Mobile Navigation Toggle
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
+/* ---- LOADER LOGIC ---- */
+(function () {
+    var loader = document.getElementById('site-loader');
+    var bar = document.getElementById('loader-bar');
+    var pct = document.getElementById('loader-pct');
+    var typed = document.getElementById('loader-typed');
+    var title = document.getElementById('loader-title');
+    var clockEl = document.getElementById('loader-clock');
+    var logLines = document.querySelectorAll('#loader-log .log-line');
 
-// Close mobile menu when clicking on a link
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-    });
-});
+    var FULL_TEXT = 'RAHUL_DEV';
+    var DURATION = 3200;
+    var start = performance.now();
 
-// Smooth scrolling for navigation links
-navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
-        
-        if (targetSection) {
-            const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// Navbar background change on scroll
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.15)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+    function tickClock() {
+        var d = new Date();
+        var hh = String(d.getHours()).padStart(2, '0');
+        var mm = String(d.getMinutes()).padStart(2, '0');
+        var ss = String(d.getSeconds()).padStart(2, '0');
+        if (clockEl) clockEl.textContent = hh + ':' + mm + ':' + ss;
     }
-});
+    tickClock();
+    var clockTimer = setInterval(tickClock, 1000);
 
-// Active navigation link highlighting
-window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section');
-    const scrollPos = window.scrollY + 100;
-
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        const sectionId = section.getAttribute('id');
-
-        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${sectionId}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
-    });
-});
-
-// Scroll animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, observerOptions);
-
-// Add fade-in class to elements and observe them
-document.addEventListener('DOMContentLoaded', () => {
-    const animateElements = document.querySelectorAll('.skill-category, .project-card, .stat, .contact-method');
-    animateElements.forEach(el => {
-        el.classList.add('fade-in');
-        observer.observe(el);
-    });
-});
-
-// Download CV button functionality
-downloadCvBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    
-    // Show loading state
-    const originalText = downloadCvBtn.innerHTML;
-    downloadCvBtn.innerHTML = '<span class="loading"></span> Downloading...';
-    downloadCvBtn.style.pointerEvents = 'none';
-    
-    // Simulate download process
-    setTimeout(() => {
-        // Replace YOUR_GOOGLE_DRIVE_FILE_ID with actual Google Drive file ID
-        const googleDriveUrl = 'https://drive.google.com/file/d/1n7d59a4CFpltR-WWjDoX4-RBCaL2yfVU/view?usp=sharing';
-        window.open(googleDriveUrl, '_blank');
-        
-        // Reset button state
-        downloadCvBtn.innerHTML = originalText;
-        downloadCvBtn.style.pointerEvents = 'auto';
-        
-        // Show success message
-        showNotification('CV download started!', 'success');
-    }, 1500);
-});
-
-// Contact form handling
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const formData = new FormData(contactForm);
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.innerHTML;
-    
-    // Show loading state
-    submitBtn.innerHTML = '<span class="loading"></span> Sending...';
-    submitBtn.disabled = true;
-    
-    // Simulate form submission
-    setTimeout(() => {
-        // Here you would typically send the data to a server
-        console.log('Form data:', {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            subject: formData.get('subject'),
-            message: formData.get('message')
-        });
-        
-        // Reset form
-        contactForm.reset();
-        
-        // Reset button
-        submitBtn.innerHTML = originalBtnText;
-        submitBtn.disabled = false;
-        
-        // Show success message
-        showNotification('Message sent successfully!', 'success');
-    }, 2000);
-});
-
-// Notification system
-function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
+    var typeIdx = 0;
+    var glitchChars = '!@#$%^&*<>?/\\|~';
+    function randomGlitch() {
+        return glitchChars[Math.floor(Math.random() * glitchChars.length)];
     }
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <span class="material-icons">${type === 'success' ? 'check_circle' : 'info'}</span>
-        <span>${message}</span>
-        <button class="notification-close">
-            <span class="material-icons">close</span>
-        </button>
-    `;
-    
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 90px;
-        right: 20px;
-        background: ${type === 'success' ? '#4caf50' : '#2196f3'};
-        color: white;
-        padding: 16px 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        max-width: 400px;
-        font-weight: 500;
-    `;
-    
-    // Add to DOM
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Close button functionality
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.style.cssText = `
-        background: none;
-        border: none;
-        color: white;
-        cursor: pointer;
-        padding: 0;
-        margin-left: auto;
-    `;
-    
-    closeBtn.addEventListener('click', () => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => notification.remove(), 300);
-    });
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => notification.remove(), 300);
-        }
-    }, 5000);
-}
-
-// Typing animation for hero title
-function typeWriter(element, text, speed = 100) {
-    let i = 0;
-    element.innerHTML = '';
-    
-    function type() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
+    function typeNext() {
+        if (typeIdx < FULL_TEXT.length) {
+            var glitch = randomGlitch();
+            typed.textContent = FULL_TEXT.slice(0, typeIdx) + glitch;
+            title.dataset.text = typed.textContent;
+            setTimeout(function () {
+                typeIdx++;
+                typed.textContent = FULL_TEXT.slice(0, typeIdx);
+                title.dataset.text = typed.textContent;
+                setTimeout(typeNext, 80 + Math.random() * 60);
+            }, 40);
         }
     }
-    
-    type();
-}
+    setTimeout(typeNext, 300);
 
-// Initialize typing animation when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const originalText = heroTitle.textContent;
-        setTimeout(() => {
-            typeWriter(heroTitle, originalText, 80);
-        }, 500);
-    }
-});
-
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    const heroContent = document.querySelector('.hero-content');
-    const heroImage = document.querySelector('.hero-image');
-    
-    if (hero && scrolled < hero.offsetHeight) {
-        const rate = scrolled * -0.5;
-        heroContent.style.transform = `translateY(${rate}px)`;
-        heroImage.style.transform = `translateY(${rate * 0.3}px)`;
-    }
-});
-
-// Skill items hover effect
-document.addEventListener('DOMContentLoaded', () => {
-    const skillItems = document.querySelectorAll('.skill-item');
-    
-    skillItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            item.style.transform = 'translateX(10px) scale(1.02)';
-        });
-        
-        item.addEventListener('mouseleave', () => {
-            item.style.transform = 'translateX(0) scale(1)';
-        });
+    logLines.forEach(function (line) {
+        var delay = parseInt(line.dataset.delay, 10) || 0;
+        setTimeout(function () { line.classList.add('visible'); }, delay);
     });
-});
 
-// Project cards 3D tilt effect
-document.addEventListener('DOMContentLoaded', () => {
-    const projectCards = document.querySelectorAll('.project-card');
-    
-    projectCards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-        });
-    });
-});
-
-// Counter animation for stats
-function animateCounter(element, target, duration = 2000) {
-    let start = 0;
-    const increment = target / (duration / 16);
-    
-    function updateCounter() {
-        start += increment;
-        if (start < target) {
-            element.textContent = Math.floor(start) + '+';
-            requestAnimationFrame(updateCounter);
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+    function animateBar(ts) {
+        var elapsed = ts - start;
+        var raw = Math.min(elapsed / DURATION, 1);
+        var v = Math.round(easeOut(raw) * 100);
+        bar.style.width = v + '%';
+        pct.textContent = v + '%';
+        if (raw < 1) {
+            requestAnimationFrame(animateBar);
         } else {
-            element.textContent = target + '+';
+            setTimeout(function () {
+                loader.classList.add('loader-hidden');
+                clearInterval(clockTimer);
+                setTimeout(function () { loader.remove(); }, 700);
+            }, 400);
         }
     }
-    
-    updateCounter();
-}
+    requestAnimationFrame(animateBar);
+})();
 
-// Initialize counter animation when stats section is visible
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const stats = entry.target.querySelectorAll('.stat h3');
-            stats.forEach(stat => {
-                const target = parseInt(stat.textContent);
-                animateCounter(stat, target);
+/* ---- THREE.JS HERO ---- */
+(function () {
+    const container = document.getElementById('threejs-container');
+    if (!container || typeof THREE === 'undefined') return;
+
+    function getSize() {
+        const rect = container.getBoundingClientRect();
+        return {
+            width: Math.max(rect.width || container.clientWidth || 300, 100),
+            height: Math.max(rect.height || container.clientHeight || 300, 100)
+        };
+    }
+
+    const initialSize = getSize();
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, initialSize.width / initialSize.height, 0.1, 1000);
+    camera.position.set(0, 0, 4.5);
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(initialSize.width, initialSize.height, false);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    container.appendChild(renderer.domElement);
+
+    const worldGroup = new THREE.Group();
+    scene.add(worldGroup);
+
+    // Geometry presets
+    const shapes = [
+        {
+            name: 'ICOSA',
+            createCage: () => new THREE.IcosahedronGeometry(1.6, 1),
+            createCore: () => new THREE.OctahedronGeometry(0.85, 0)
+        },
+        {
+            name: 'KNOT',
+            createCage: () => new THREE.TorusKnotGeometry(1.15, 0.28, 64, 8),
+            createCore: () => new THREE.TetrahedronGeometry(0.85, 0)
+        },
+        {
+            name: 'CUBE',
+            createCage: () => new THREE.BoxGeometry(1.8, 1.8, 1.8, 2, 2, 2),
+            createCore: () => new THREE.SphereGeometry(0.8, 16, 16)
+        },
+        {
+            name: 'DODECA',
+            createCage: () => new THREE.DodecahedronGeometry(1.5, 0),
+            createCore: () => new THREE.IcosahedronGeometry(0.8, 0)
+        }
+    ];
+
+    let currentShapeIdx = 0;
+    let isWireframe = true;
+    let speedMultiplier = 1.0;
+
+    // Outer cage mesh
+    const cageMat = new THREE.MeshBasicMaterial({ color: 0x111111, wireframe: true, wireframeLinewidth: 2 });
+    let cageMesh = new THREE.Mesh(shapes[0].createCage(), cageMat);
+    worldGroup.add(cageMesh);
+
+    // Orbit ring 1
+    const ring1Geo = new THREE.TorusGeometry(1.9, 0.012, 8, 64);
+    const ring1Mat = new THREE.MeshBasicMaterial({ color: 0xCCFF00, opacity: 0.35, transparent: true });
+    const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
+    ring1.rotation.x = Math.PI / 3;
+    worldGroup.add(ring1);
+
+    // Orbit ring 2
+    const ring2Geo = new THREE.TorusGeometry(2.1, 0.008, 8, 64);
+    const ring2Mat = new THREE.MeshBasicMaterial({ color: 0xCCFF00, opacity: 0.18, transparent: true });
+    const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+    ring2.rotation.x = -Math.PI / 5;
+    ring2.rotation.y = Math.PI / 4;
+    worldGroup.add(ring2);
+
+    // Core octahedron
+    const coreMat = new THREE.MeshBasicMaterial({ color: 0xCCFF00 });
+    let coreMesh = new THREE.Mesh(shapes[0].createCore(), coreMat);
+    worldGroup.add(coreMesh);
+
+    // Floating particle dots
+    const particleCount = 65;
+    const particlePositions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+        const r = 2.4 + Math.random() * 1.2;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        particlePositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+        particlePositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+        particlePositions[i * 3 + 2] = r * Math.cos(phi);
+    }
+    const particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    const particleMat = new THREE.PointsMaterial({ color: 0xCCFF00, size: 0.045, transparent: true, opacity: 0.7 });
+    const particles = new THREE.Points(particleGeo, particleMat);
+    worldGroup.add(particles);
+
+    // Color palettes
+    const palettes = [
+        { label: 'LIME', hex: 0xCCFF00 },
+        { label: 'CYAN', hex: 0x00F0FF },
+        { label: 'AMBER', hex: 0xFF6B35 }
+    ];
+    let currentPaletteIdx = 0;
+
+    // Controls setup
+    const shapeBtn = document.getElementById('canvas-shape-btn');
+    if (shapeBtn) {
+        shapeBtn.addEventListener('click', function () {
+            currentShapeIdx = (currentShapeIdx + 1) % shapes.length;
+            const currentPreset = shapes[currentShapeIdx];
+            cageMesh.geometry.dispose();
+            cageMesh.geometry = currentPreset.createCage();
+            coreMesh.geometry.dispose();
+            coreMesh.geometry = currentPreset.createCore();
+            shapeBtn.textContent = '[ GEOMETRY: ' + currentPreset.name + ' ]';
+        });
+    }
+
+    const wireBtn = document.getElementById('canvas-wire-btn');
+    if (wireBtn) {
+        wireBtn.addEventListener('click', function () {
+            isWireframe = !isWireframe;
+            cageMat.wireframe = isWireframe;
+            wireBtn.textContent = isWireframe ? '[ WIRE: ON ]' : '[ WIRE: OFF ]';
+        });
+    }
+
+    const speedBtn = document.getElementById('canvas-speed-btn');
+    if (speedBtn) {
+        speedBtn.addEventListener('click', function () {
+            speedMultiplier = speedMultiplier === 1.0 ? 2.5 : 1.0;
+            speedBtn.textContent = speedMultiplier === 1.0 ? '[ SPD: 1X ]' : '[ SPD: 2.5X ]';
+        });
+    }
+
+    const colorBtn = document.getElementById('canvas-color-btn');
+    if (colorBtn) {
+        colorBtn.addEventListener('click', function () {
+            currentPaletteIdx = (currentPaletteIdx + 1) % palettes.length;
+            const p = palettes[currentPaletteIdx];
+            coreMat.color.setHex(p.hex);
+            ring1Mat.color.setHex(p.hex);
+            ring2Mat.color.setHex(p.hex);
+            particleMat.color.setHex(p.hex);
+            colorBtn.textContent = '[ COLOR: ' + p.label + ' ]';
+        });
+    }
+
+    // Pointer tracking
+    let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+    function updatePointer(clientX, clientY) {
+        const rect = container.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+            mouseX = ((clientX - rect.left) / rect.width) * 2 - 1;
+            mouseY = -(((clientY - rect.top) / rect.height) * 2 - 1);
+        }
+    }
+    window.addEventListener('mousemove', (e) => { updatePointer(e.clientX, e.clientY); });
+    container.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length > 0) {
+            updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+        }
+    }, { passive: true });
+
+    function onWindowResize() {
+        const size = getSize();
+        camera.aspect = size.width / size.height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(size.width, size.height, false);
+    }
+    window.addEventListener('resize', onWindowResize);
+
+    const clock = new THREE.Clock();
+    function animate() {
+        requestAnimationFrame(animate);
+        const elapsed = clock.getElapsedTime() * speedMultiplier;
+
+        cageMesh.rotation.x  = elapsed * 0.25;
+        cageMesh.rotation.y  = elapsed * 0.35;
+        coreMesh.rotation.x  = -elapsed * 0.4;
+        coreMesh.rotation.z  = elapsed * 0.5;
+        ring1.rotation.z     = elapsed * 0.2;
+        ring2.rotation.z     = -elapsed * 0.15;
+        particles.rotation.y = elapsed * 0.08;
+
+        targetX += (mouseX * 0.6 - targetX) * 0.08;
+        targetY += (mouseY * 0.6 - targetY) * 0.08;
+        worldGroup.rotation.y = targetX;
+        worldGroup.rotation.x = -targetY;
+
+        renderer.render(scene, camera);
+    }
+    animate();
+})();
+
+/* ---- MENU LOGIC ---- */
+(function () {
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    if (!menuToggle || !navLinks) return;
+
+    menuToggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const isOpen = navLinks.classList.toggle('nav-open');
+        menuToggle.setAttribute('aria-expanded', isOpen);
+        const icon = menuToggle.querySelector('.menu-icon');
+        if (icon) icon.textContent = isOpen ? '[ CLOSE ✕ ]' : '[ MENU ☰ ]';
+    });
+
+    document.addEventListener('click', function (e) {
+        if (navLinks.classList.contains('nav-open') &&
+            !navLinks.contains(e.target) &&
+            !menuToggle.contains(e.target)) {
+            navLinks.classList.remove('nav-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            const icon = menuToggle.querySelector('.menu-icon');
+            if (icon) icon.textContent = '[ MENU ☰ ]';
+        }
+    });
+
+    navLinks.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            navLinks.classList.remove('nav-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            const icon = menuToggle.querySelector('.menu-icon');
+            if (icon) icon.textContent = '[ MENU ☰ ]';
+        });
+    });
+})();
+
+/* ---- SCROLL REVEAL ---- */
+(function () {
+    var items = document.querySelectorAll('[data-reveal]');
+    if (!items.length) return;
+
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                io.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
+
+    items.forEach(function (el) { io.observe(el); });
+})();
+
+/* ---- SKILL BAR ANIMATION (scroll-triggered) ---- */
+(function () {
+    var bars = document.querySelectorAll('.skill-bar-fill');
+    if (!bars.length) return;
+
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('skill-bar-animated');
+                io.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    bars.forEach(function (b) { io.observe(b); });
+})();
+
+/* ---- SCROLL-SPY NAV ---- */
+(function () {
+    var spyLinks = document.querySelectorAll('.nav-spy');
+    if (!spyLinks.length) return;
+
+    var sectionIds = Array.from(spyLinks)
+        .map(function (a) { return a.getAttribute('data-section'); })
+        .filter(Boolean);
+    var sections = sectionIds
+        .map(function (id) { return document.getElementById(id); })
+        .filter(Boolean);
+
+    function updateSpy() {
+        var scrollY = window.scrollY + 120;
+        var current = '';
+        sections.forEach(function (sec) {
+            if (sec && sec.offsetTop <= scrollY) current = sec.id;
+        });
+        spyLinks.forEach(function (a) {
+            a.classList.toggle('active', a.getAttribute('data-section') === current);
+        });
+    }
+
+    window.addEventListener('scroll', updateSpy, { passive: true });
+    updateSpy();
+})();
+
+/* ---- RETURN TO START / TOP HANDLERS ---- */
+(function () {
+    var backToTopBtn = document.getElementById('btn-back-to-top');
+    var brandLogo = document.getElementById('brand-logo');
+
+    function scrollToTop(e) {
+        if (e) e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    if (backToTopBtn) {
+        function toggleFloatingBtn() {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }
+        window.addEventListener('scroll', toggleFloatingBtn, { passive: true });
+        toggleFloatingBtn();
+        backToTopBtn.addEventListener('click', scrollToTop);
+    }
+
+    if (brandLogo) {
+        brandLogo.addEventListener('click', scrollToTop);
+    }
+})();
+
+/* ---- DARK MODE TOGGLE ---- */
+(function () {
+    var btn = document.getElementById('dark-mode-toggle');
+    var root = document.documentElement;
+    var stored = localStorage.getItem('rahul-theme');
+    if (stored === 'dark') root.classList.add('dark-mode');
+
+    if (btn) {
+        btn.addEventListener('click', function () {
+            var isDark = root.classList.toggle('dark-mode');
+            localStorage.setItem('rahul-theme', isDark ? 'dark' : 'light');
+        });
+    }
+})();
+
+/* ---- CONTACT FORM (EmailJS) ---- */
+(function () {
+    // Initialise EmailJS — replace with your own Public Key from emailjs.com
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init({ publicKey: 'YOUR_EMAILJS_PUBLIC_KEY' });
+    }
+
+    var form   = document.getElementById('contact-form');
+    var submit = document.getElementById('cf-submit');
+    var status = document.getElementById('cf-status');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+
+        submit.disabled = true;
+        submit.textContent = '[ TRANSMITTING... ]';
+        status.textContent = '';
+
+        if (typeof emailjs === 'undefined') {
+            // Fallback: open mailto link
+            var name  = document.getElementById('cf-name').value;
+            var email = document.getElementById('cf-email').value;
+            var msg   = document.getElementById('cf-msg').value;
+            window.location.href =
+                'mailto:rahul@example.com?subject=Portfolio%20Contact%20from%20' +
+                encodeURIComponent(name) +
+                '&body=' +
+                encodeURIComponent(msg + '\n\nReply to: ' + email);
+            status.textContent = '✓ MAILTO OPENED';
+            status.style.color = 'var(--primary)';
+            submit.disabled = false;
+            submit.textContent = '[ EXECUTE DISPATCH ↵ ]';
+            return;
+        }
+
+        // EmailJS send — replace service_id and template_id with yours
+        emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form)
+            .then(function () {
+                status.textContent = "✓ MESSAGE SENT — I'll reply within 24 hrs";
+                status.style.color = 'var(--primary)';
+                form.reset();
+            })
+            .catch(function (err) {
+                status.textContent = '✗ SEND FAILED — try emailing directly';
+                status.style.color = 'var(--secondary)';
+                console.error('EmailJS error:', err);
+            })
+            .finally(function () {
+                submit.disabled = false;
+                submit.textContent = '[ EXECUTE DISPATCH ↵ ]';
             });
-            statsObserver.unobserve(entry.target);
+    });
+})();
+
+/* ---- SYNTHESIZED MECHANICAL AUDIO (SFX) ---- */
+(function () {
+    var sfxBtn = document.getElementById('sfx-toggle');
+    var isSfxEnabled = localStorage.getItem('rahul-sfx') === 'true';
+    var audioCtx = null;
+
+    function initAudioContext() {
+        if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+            var AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioCtxClass();
+        }
+    }
+
+    function playKeyClick(type) {
+        if (!isSfxEnabled) return;
+        try {
+            initAudioContext();
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            var osc = audioCtx.createOscillator();
+            var gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            var now = audioCtx.currentTime;
+            var freq = type === 'keydown' ? (750 + Math.random() * 150) : (450 + Math.random() * 80);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            osc.frequency.exponentialRampToValueAtTime(120, now + 0.03);
+
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+
+            osc.start(now);
+            osc.stop(now + 0.04);
+        } catch (e) {}
+    }
+
+    function updateSfxButtonUI() {
+        if (!sfxBtn) return;
+        if (isSfxEnabled) {
+            sfxBtn.textContent = '[ 🔊 SFX: ON ]';
+            sfxBtn.classList.add('sfx-enabled');
+        } else {
+            sfxBtn.textContent = '[ 🔈 SFX: OFF ]';
+            sfxBtn.classList.remove('sfx-enabled');
+        }
+    }
+
+    if (sfxBtn) {
+        updateSfxButtonUI();
+        sfxBtn.addEventListener('click', function () {
+            isSfxEnabled = !isSfxEnabled;
+            localStorage.setItem('rahul-sfx', isSfxEnabled ? 'true' : 'false');
+            updateSfxButtonUI();
+            if (isSfxEnabled) playKeyClick('keydown');
+        });
+    }
+
+    // Play tactile sound on interactive button & link clicks
+    document.addEventListener('click', function (e) {
+        if (!isSfxEnabled) return;
+        var target = e.target.closest('button, a, .card, .project-card, .social-card');
+        if (target && target !== sfxBtn) {
+            playKeyClick('keydown');
         }
     });
-}, { threshold: 0.5 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const aboutStats = document.querySelector('.about-stats');
-    if (aboutStats) {
-        statsObserver.observe(aboutStats);
-    }
-});
+    window.playTerminalSFX = playKeyClick;
+})();
 
-// Add CSS for active navigation link
-const style = document.createElement('style');
-style.textContent = `
-    .nav-link.active {
-        color: #1976d2 !important;
-    }
-    .nav-link.active::after {
-        width: 100% !important;
-    }
-    .hamburger.active .bar:nth-child(2) {
-        opacity: 0;
-    }
-    .hamburger.active .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-    }
-    .hamburger.active .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-    }
-`;
-document.head.appendChild(style);
+/* ---- INTERACTIVE DEVELOPER TERMINAL CLI ---- */
+(function () {
+    var cliForm = document.getElementById('cli-form');
+    var cliInput = document.getElementById('cli-input');
+    var cliOutput = document.getElementById('cli-output');
+    var cliClearBtn = document.getElementById('cli-clear-btn');
+    if (!cliForm || !cliInput || !cliOutput) return;
 
-// Initialize everything when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Portfolio website loaded successfully!');
-    
-    // Add smooth reveal animation to sections
-    const sections = document.querySelectorAll('section');
-    sections.forEach((section, index) => {
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(30px)';
-        section.style.transition = 'all 0.6s ease';
-        
-        setTimeout(() => {
-            section.style.opacity = '1';
-            section.style.transform = 'translateY(0)';
-        }, index * 200);
+    var commandHistory = [];
+    var historyIndex = -1;
+
+    function appendRow(content, className) {
+        var row = document.createElement('div');
+        row.className = 'cli-row ' + (className || '');
+        row.innerHTML = content;
+        cliOutput.appendChild(row);
+        cliOutput.scrollTop = cliOutput.scrollHeight;
+    }
+
+    var commands = {
+        help: function () {
+            return '<div class="cli-output-line">AVAILABLE COMMANDS:\n' +
+                   '  • <strong>about</strong>      : Developer background & profile\n' +
+                   '  • <strong>skills</strong>     : Technical competencies & stack\n' +
+                   '  • <strong>projects</strong>   : Selected portfolio projects\n' +
+                   '  • <strong>resume</strong>     : Open/download resume (PDF)\n' +
+                   '  • <strong>theme</strong>      : Toggle dark / light mode\n' +
+                   '  • <strong>contact</strong>    : Scroll to direct message form\n' +
+                   '  • <strong>clear</strong>      : Clear console output\n' +
+                   '  • <strong>sudo hire rahul</strong> : Clearance authorization check</div>';
+        },
+        about: function () {
+            return '<div class="cli-output-line">RAHUL BISWAL // FRONTEND DEVELOPER\n' +
+                   'Education: CS Graduate (2024)\n' +
+                   'Location:  New Delhi, India\n' +
+                   'Focus:     Fast, accessible, and delightful web interfaces with React, modern CSS, and JavaScript.</div>';
+        },
+        skills: function () {
+            return '<div class="cli-output-line">CORE CAPABILITIES:\n' +
+                   '  [LANGUAGES]    JavaScript (ES6+), TypeScript, HTML5, CSS3/SCSS\n' +
+                   '  [FRAMEWORKS]   React, Next.js, Redux, Tailwind CSS\n' +
+                   '  [TOOLS]        Git, Vite, Webpack, Figma, Three.js\n' +
+                   '  [STANDARDS]    REST APIs, Responsive Design, WCAG 2.1 AA</div>';
+        },
+        projects: function () {
+            return '<div class="cli-output-line">SELECTED ARCHIVES:\n' +
+                   '  01. DevPortfolio   - Neo-brutalist interactive portfolio with Three.js\n' +
+                   '  02. TaskFlow Pro   - Agile Kanban application with React & DnD\n' +
+                   '  03. CodeSnippet Hub - Code vault with real-time syntax highlighting</div>';
+        },
+        resume: function () {
+            var resumeLink = document.querySelector('.desktop-resume');
+            if (resumeLink) {
+                resumeLink.click();
+                return '<div class="cli-success">✓ Launching resume document...</div>';
+            }
+            return '<div class="cli-output-line">Resume link: <a href="#resume" style="color:#ccff00;">[ RESUME.PDF ↗ ]</a></div>';
+        },
+        theme: function () {
+            var themeBtn = document.getElementById('dark-mode-toggle');
+            if (themeBtn) themeBtn.click();
+            var isDark = document.documentElement.classList.contains('dark-mode');
+            return '<div class="cli-success">✓ Theme switched to ' + (isDark ? 'DARK' : 'LIGHT') + ' mode.</div>';
+        },
+        contact: function () {
+            var nameField = document.getElementById('cf-name');
+            if (nameField) {
+                nameField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(function () { nameField.focus(); }, 400);
+            }
+            return '<div class="cli-success">✓ Jumped to direct message dispatch form below.</div>';
+        },
+        clear: function () {
+            cliOutput.innerHTML = '<div class="cli-row cli-welcome">// rahul_dev bash shell v2.4 initialized. System online.</div>' +
+                                  '<div class="cli-row cli-hint">Type <span class="cli-cmd-highlight">\'help\'</span> for commands.</div>';
+            return null;
+        }
+    };
+
+    function handleCommand(rawCmd) {
+        var cmd = rawCmd.trim().toLowerCase();
+        if (!cmd) return;
+
+        appendRow('<span style="color:#ccff00;">rahul@portfolio:~$</span> ' + rawCmd, 'cli-input-echo');
+
+        if (cmd === 'sudo hire rahul' || cmd === 'hire rahul' || cmd === 'hire') {
+            appendRow('<div class="cli-success">🎉 [PERMISSION GRANTED: S-TIER CANDIDATE APPROVED]\n' +
+                      'STATUS: Open to Frontend Roles & Internships.\n' +
+                      'Let\'s build something exceptional together! Dispatching priority coordinates...</div>', 'cli-success');
+            var contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                setTimeout(function () {
+                    contactForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 500);
+            }
+            return;
+        }
+
+        if (commands[cmd]) {
+            var res = commands[cmd]();
+            if (res) appendRow(res);
+        } else {
+            appendRow('bash: ' + rawCmd + ': command not found. Type <span class="cli-cmd-highlight">\'help\'</span> for list of commands.', 'cli-error');
+        }
+    }
+
+    cliForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var val = cliInput.value;
+        if (!val.trim()) return;
+        commandHistory.push(val);
+        historyIndex = commandHistory.length;
+        handleCommand(val);
+        cliInput.value = '';
+        if (window.playTerminalSFX) window.playTerminalSFX('keydown');
     });
-});
+
+    cliInput.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowUp') {
+            if (historyIndex > 0) {
+                historyIndex--;
+                cliInput.value = commandHistory[historyIndex] || '';
+            }
+            e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+            if (historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                cliInput.value = commandHistory[historyIndex] || '';
+            } else {
+                historyIndex = commandHistory.length;
+                cliInput.value = '';
+            }
+            e.preventDefault();
+        }
+    });
+
+    if (cliClearBtn) {
+        cliClearBtn.addEventListener('click', function () {
+            commands.clear();
+        });
+    }
+})();
+
