@@ -592,6 +592,21 @@ nav.nav-links a:hover:not(.active) {
   gap: var(--space-xs);
 }
 
+.card-header-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  background-color: var(--surface-container-high);
+  color: var(--on-surface);
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 1px solid var(--on-background);
+}
+
+.card-header-badge--accent {
+  background-color: var(--primary-container);
+  color: #000000;
+}
+
 .card-title {
   margin-bottom: 8px;
 }
@@ -1741,9 +1756,64 @@ html.dark-mode .terminal-title {
   border-color: rgba(204,255,0,0.2);
 }
 
+html.dark-mode .canvas-bg-grid {
+  background-image: linear-gradient(to right, rgba(232, 232, 228, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(232, 232, 228, 0.08) 1px, transparent 1px);
+  opacity: 0.6;
+}
+
+/* Skill Section Dark Mode Visibility Fixes */
 html.dark-mode .skill-bar-track {
-  background: rgba(204,255,0,0.08);
-  border-color: rgba(204,255,0,0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(232, 232, 228, 0.28);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+html.dark-mode .skill-bar-fill {
+  background: #ccff00;
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.75), 0 0 3px #ccff00;
+}
+
+html.dark-mode .skill-info > span:first-child {
+  color: #f4f4f0;
+}
+
+html.dark-mode .skill-meta {
+  color: #b4b8a0;
+}
+
+html.dark-mode .skill-tier {
+  border-width: 1px;
+}
+
+html.dark-mode .tier-advanced {
+  background-color: #ccff00;
+  color: #0d0f0d;
+  border-color: #ccff00;
+  box-shadow: 0 0 8px rgba(204, 255, 0, 0.35);
+}
+
+html.dark-mode .tier-proficient {
+  background-color: rgba(204, 255, 0, 0.15);
+  color: #ccff00;
+  border-color: rgba(204, 255, 0, 0.45);
+}
+
+html.dark-mode .tier-competent {
+  background-color: rgba(255, 107, 53, 0.18);
+  color: #ff9166;
+  border-color: rgba(255, 107, 53, 0.45);
+}
+
+html.dark-mode .card-header-badge {
+  background: var(--surface-container-high);
+  color: var(--on-surface);
+  border: 1px solid rgba(204, 255, 0, 0.2);
+}
+
+html.dark-mode .card-header-badge--accent {
+  background: #ccff00;
+  color: #0d0f0d;
+  font-weight: 700;
 }
 
 html.dark-mode .about-stat {

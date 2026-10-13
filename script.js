@@ -138,10 +138,39 @@
     let isWireframe = true;
     let speedMultiplier = 1.0;
 
+    // Theme-adaptive wireframe color (crisp off-white in dark mode, deep slate in light mode)
+    function getWireframeColor() {
+        return document.documentElement.classList.contains('dark-mode') ? 0xe8e8e4 : 0x1a1c1a;
+    }
+
     // Outer cage mesh
-    const cageMat = new THREE.MeshBasicMaterial({ color: 0x111111, wireframe: true, wireframeLinewidth: 2 });
+    const cageMat = new THREE.MeshBasicMaterial({
+        color: getWireframeColor(),
+        wireframe: true,
+        wireframeLinewidth: 2
+    });
     let cageMesh = new THREE.Mesh(shapes[0].createCage(), cageMat);
     worldGroup.add(cageMesh);
+
+    // Dynamic sync when theme toggles
+    function updateWireframeTheme() {
+        if (cageMat) {
+            cageMat.color.setHex(getWireframeColor());
+        }
+    }
+    window.updateThreeTheme = updateWireframeTheme;
+
+    if (typeof MutationObserver !== 'undefined') {
+        const themeObserver = new MutationObserver(function (mutations) {
+            for (let i = 0; i < mutations.length; i++) {
+                if (mutations[i].attributeName === 'class') {
+                    updateWireframeTheme();
+                    break;
+                }
+            }
+        });
+        themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    }
 
     // Orbit ring 1
     const ring1Geo = new THREE.TorusGeometry(1.9, 0.012, 8, 64);
@@ -573,6 +602,7 @@
         if (full) full.textContent = isDark ? '[ ☼ LIGHT ]' : '[ ◐ DARK ]';
         if (short) short.textContent = isDark ? '☼' : '◐';
         btn.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        if (window.updateThreeTheme) window.updateThreeTheme();
     }
     updateThemeUI();
 
