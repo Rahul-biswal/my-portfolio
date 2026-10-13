@@ -587,9 +587,9 @@
 
 /* ---- CONTACT FORM (EmailJS) ---- */
 (function () {
-    // Initialise EmailJS — replace with your own Public Key from emailjs.com
+    // Initialise EmailJS
     if (typeof emailjs !== 'undefined') {
-        emailjs.init({ publicKey: 'YOUR_EMAILJS_PUBLIC_KEY' });
+        emailjs.init({ publicKey: '5lO3lmt-LZbpuQD0b' });
     }
 
     var form   = document.getElementById('contact-form');
@@ -611,7 +611,7 @@
             var email = document.getElementById('cf-email').value;
             var msg   = document.getElementById('cf-msg').value;
             window.location.href =
-                'mailto:rahul@example.com?subject=Portfolio%20Contact%20from%20' +
+                'mailto:rahulbiswal196@gmail.com?subject=Portfolio%20Contact%20from%20' +
                 encodeURIComponent(name) +
                 '&body=' +
                 encodeURIComponent(msg + '\n\nReply to: ' + email);
@@ -622,8 +622,8 @@
             return;
         }
 
-        // EmailJS send — replace service_id and template_id with yours
-        emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', form)
+        // EmailJS send
+        emailjs.sendForm('service_5ggcecs', 'template_ydh7hon', form)
             .then(function () {
                 status.textContent = "✓ MESSAGE SENT — I'll reply within 24 hrs";
                 status.style.color = 'var(--primary)';
@@ -768,6 +768,7 @@
                    '  • <strong>resume</strong>     : Open/download resume (PDF)\n' +
                    '  • <strong>theme</strong>      : Toggle dark / light mode\n' +
                    '  • <strong>contact</strong>    : Scroll to direct message form\n' +
+                   '  • <strong>socials</strong>    : Online handles & profiles\n' +
                    '  • <strong>clear</strong>      : Clear console output\n' +
                    '  • <strong>sudo hire rahul</strong> : Clearance authorization check</div>';
         },
@@ -793,10 +794,10 @@
         resume: function () {
             var resumeLink = document.querySelector('.desktop-resume');
             if (resumeLink) {
-                resumeLink.click();
-                return '<div class="cli-success">✓ Launching resume document...</div>';
+                window.open(resumeLink.href, '_blank', 'noopener,noreferrer');
+                return '<div class="cli-success">✓ Launching resume document in new tab...</div>';
             }
-            return '<div class="cli-output-line">Resume link: <a href="#resume" style="color:#ccff00;">[ RESUME.PDF ↗ ]</a></div>';
+            return '<div class="cli-output-line">Resume link: <a href="https://drive.google.com/file/d/1n7d59a4CFpltR-WWjDoX4-RBCaL2yfVU/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:var(--primary-container);">[ RESUME.PDF ↗ ]</a></div>';
         },
         theme: function () {
             var themeBtn = document.getElementById('dark-mode-toggle');
@@ -811,6 +812,13 @@
                 setTimeout(function () { nameField.focus(); }, 400);
             }
             return '<div class="cli-success">✓ Jumped to direct message dispatch form below.</div>';
+        },
+        socials: function () {
+            return '<div class="cli-output-line">CONNECT WITH RAHUL KUMAR BISWAL:\n' +
+                   '  • GitHub   : <a href="https://github.com/Rahul-biswal" target="_blank" rel="noopener" style="color:var(--primary-container);">github.com/Rahul-biswal</a>\n' +
+                   '  • LinkedIn : <a href="https://www.linkedin.com/in/rahulkumarbiswal" target="_blank" rel="noopener" style="color:var(--primary-container);">linkedin.com/in/rahulkumarbiswal</a>\n' +
+                   '  • X/Twitter: <a href="https://x.com/Rahulku89844866" target="_blank" rel="noopener" style="color:var(--primary-container);">@Rahulku89844866</a>\n' +
+                   '  • Email    : <a href="mailto:rahulbiswal196@gmail.com" style="color:var(--primary-container);">rahulbiswal196@gmail.com</a></div>';
         },
         clear: function () {
             cliOutput.innerHTML = '<div class="cli-row cli-welcome">// rahul_dev bash shell v2.4 initialized. System online.</div>' +
