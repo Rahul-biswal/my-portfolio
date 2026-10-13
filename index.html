@@ -478,9 +478,13 @@
     <!-- ===== /LOADING SCREEN ===== -->
     <header class="header">
         <div class="header-inner">
-            <a href="#hero" class="logo" id="brand-logo" aria-label="Return to starting section" title="Return to starting section">
+            <a href="#hero" class="logo" id="brand-logo" aria-label="Return to starting section"
+                title="Return to starting section">
                 <span class="pulse-dot"></span>
-                <span class="logo-text">[ RAHUL_DEV // V1.0 ]</span>
+                <span class="logo-text">
+                    <span class="logo-text-full">[ RAHUL_DEV // V1.0 ]</span>
+                    <span class="logo-text-short">[ RAHUL.DEV ]</span>
+                </span>
             </a>
             <nav class="nav-links" id="nav-links">
                 <a class="nav-spy" href="#about" data-section="about">[01: ABOUT]</a>
@@ -492,12 +496,21 @@
             </nav>
             <div class="header-actions">
                 <button class="btn-sfx" id="sfx-toggle" aria-label="Toggle mechanical sound effects"
-                    title="Toggle audio feedback">[ 🔈 SFX ]</button>
+                    title="Toggle audio feedback">
+                    <span class="btn-text-full">[ 🔈 SFX ]</span>
+                    <span class="btn-text-short">🔈</span>
+                </button>
                 <button class="btn-dark-mode" id="dark-mode-toggle" aria-label="Toggle dark mode"
-                    title="Toggle dark mode">[ ◐ MODE ]</button>
+                    title="Toggle dark mode">
+                    <span class="btn-text-full">[ ◐ MODE ]</span>
+                    <span class="btn-text-short">◐</span>
+                </button>
                 <a class="btn-resume desktop-resume" href="#resume">[ RESUME.PDF ↗ ]</a>
                 <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
-                    <span class="menu-icon">[ MENU ☰ ]</span>
+                    <span class="menu-icon">
+                        <span class="btn-text-full">[ MENU ☰ ]</span>
+                        <span class="btn-text-short">☰</span>
+                    </span>
                 </button>
             </div>
         </div>
@@ -542,7 +555,10 @@
             <div class="hero-visual">
                 <div class="canvas-container">
                     <div class="canvas-header">
-                        <span>[ THREEJS_WIREFRAME_SIMULATION.GL // LIVE ]</span>
+                        <span class="canvas-title">
+                            <span class="canvas-title-full">[ THREEJS_WIREFRAME_SIMULATION.GL // LIVE ]</span>
+                            <span class="canvas-title-short">[ THREEJS.GL // LIVE ]</span>
+                        </span>
                         <span>[ _ ] [ □ ] [ ✕ ]</span>
                     </div>
                     <div class="canvas-body">
@@ -554,13 +570,17 @@
                     <div class="canvas-footer">
                         <div class="canvas-status">
                             <span class="canvas-status-dot"></span>
-                            <span>DRAG TO TILT</span>
+                            <span>TILT & CLICK TO PULSE</span>
                         </div>
                         <div class="canvas-controls">
-                            <button type="button" class="canvas-btn" id="canvas-shape-btn" aria-label="Cycle 3D Geometry" title="Cycle Geometry">[ GEOMETRY: ICOSA ]</button>
-                            <button type="button" class="canvas-btn" id="canvas-wire-btn" aria-label="Toggle Wireframe" title="Toggle Wireframe">[ WIRE: ON ]</button>
-                            <button type="button" class="canvas-btn" id="canvas-speed-btn" aria-label="Toggle Rotation Speed" title="Toggle Speed">[ SPD: 1X ]</button>
-                            <button type="button" class="canvas-btn" id="canvas-color-btn" aria-label="Cycle Core Color" title="Cycle Theme Color">[ PALETTE: LIME ]</button>
+                            <button type="button" class="canvas-btn" id="canvas-shape-btn"
+                                aria-label="Cycle 3D Geometry" title="Cycle Geometry">[ GEOMETRY: ICOSA ]</button>
+                            <button type="button" class="canvas-btn" id="canvas-wire-btn" aria-label="Toggle Wireframe"
+                                title="Toggle Wireframe">[ WIRE: ON ]</button>
+                            <button type="button" class="canvas-btn" id="canvas-speed-btn"
+                                aria-label="Toggle Rotation Speed" title="Toggle Speed">[ SPD: 1X ]</button>
+                            <button type="button" class="canvas-btn" id="canvas-color-btn" aria-label="Cycle Core Color"
+                                title="Cycle Theme Color">[ PALETTE: LIME ]</button>
                         </div>
                     </div>
                 </div>
@@ -589,15 +609,15 @@
                         entry-level roles or internships where I can ship real product with a great team.</p>
                     <div class="about-stats">
                         <div class="about-stat">
-                            <span class="about-stat-num" id="stat-projects">5+</span>
+                            <span class="about-stat-num" id="stat-projects" data-target="5" data-suffix="+">5+</span>
                             <span class="about-stat-label">PROJECTS</span>
                         </div>
                         <div class="about-stat">
-                            <span class="about-stat-num">2024</span>
+                            <span class="about-stat-num" data-target="2024">2024</span>
                             <span class="about-stat-label">CS GRAD</span>
                         </div>
                         <div class="about-stat">
-                            <span class="about-stat-num">&lt;24H</span>
+                            <span class="about-stat-num" data-prefix="<" data-target="24" data-suffix="H">&lt;24H</span>
                             <span class="about-stat-label">REPLY TIME</span>
                         </div>
                         <div class="about-stat">
@@ -665,11 +685,13 @@
                 <div class="card" data-reveal="left" data-delay="100">
                     <div>
                         <div class="card-header">
-                            <span style="background:var(--primary-container);color:#000;font-weight:700;padding:2px 6px;">DOMAIN_01</span>
+                            <span
+                                style="background:var(--primary-container);color:#000;font-weight:700;padding:2px 6px;">DOMAIN_01</span>
                             <span style="color:var(--secondary)">STATUS: PRODUCTION_READY</span>
                         </div>
                         <h3 class="card-title">01 // UI & WEB STANDARDS</h3>
-                        <p class="card-desc">Building pixel-perfect, accessible, and responsive web interfaces from Figma designs with clean semantic structure and CSS micro-animations.</p>
+                        <p class="card-desc">Building pixel-perfect, accessible, and responsive web interfaces from
+                            Figma designs with clean semantic structure and CSS micro-animations.</p>
                         <div class="skill-bars">
                             <div class="skill-bar-item">
                                 <div class="skill-info">
@@ -718,7 +740,8 @@
                             <span style="color:var(--secondary)">STATUS: PRODUCTION_READY</span>
                         </div>
                         <h3 class="card-title">02 // REACT & FRAMEWORKS</h3>
-                        <p class="card-desc">Component-driven architecture with React 19, TypeScript safety, efficient state management, and modern full-stack routing.</p>
+                        <p class="card-desc">Component-driven architecture with React 19, TypeScript safety, efficient
+                            state management, and modern full-stack routing.</p>
                         <div class="skill-bars">
                             <div class="skill-bar-item">
                                 <div class="skill-info">
@@ -763,11 +786,13 @@
                 <div class="card" data-reveal="left" data-delay="300">
                     <div>
                         <div class="card-header">
-                            <span style="background:var(--primary-container);color:#000;font-weight:700;padding:2px 6px;">DOMAIN_03</span>
+                            <span
+                                style="background:var(--primary-container);color:#000;font-weight:700;padding:2px 6px;">DOMAIN_03</span>
                             <span style="color:var(--secondary)">STATUS: CREATIVE_DEV</span>
                         </div>
                         <h3 class="card-title">03 // CREATIVE & 3D WEB</h3>
-                        <p class="card-desc">Crafting memorable web experiences with Three.js WebGL scenes, interactive canvas shaders, and tactile micro-interactions.</p>
+                        <p class="card-desc">Crafting memorable web experiences with Three.js WebGL scenes, interactive
+                            canvas shaders, and tactile micro-interactions.</p>
                         <div class="skill-bars">
                             <div class="skill-bar-item">
                                 <div class="skill-info">
@@ -816,7 +841,8 @@
                             <span style="color:var(--secondary)">STATUS: ACTIVE_WORKFLOW</span>
                         </div>
                         <h3 class="card-title">04 // TOOLS & ARCHITECTURE</h3>
-                        <p class="card-desc">Modern developer tooling, agile version control, asynchronous data fetching, and collaboration with backend engineers.</p>
+                        <p class="card-desc">Modern developer tooling, agile version control, asynchronous data
+                            fetching, and collaboration with backend engineers.</p>
                         <div class="skill-bars">
                             <div class="skill-bar-item">
                                 <div class="skill-info">
@@ -892,9 +918,12 @@
                 </div>
                 <div class="project-details">
                     <div>
-                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">FEATURED PROJECT // WEBGL</div>
+                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">FEATURED PROJECT //
+                            WEBGL</div>
                         <h3>#01 // SYNAPSE-3D</h3>
-                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">An interactive 3D node visualisation graph built with Three.js and React. Features dynamic physics simulation, custom orbit controls, and live WebSocket state syncing across connected clients.</p>
+                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">An interactive 3D node
+                            visualisation graph built with Three.js and React. Features dynamic physics simulation,
+                            custom orbit controls, and live WebSocket state syncing across connected clients.</p>
                         <div class="project-highlights">
                             <span class="highlight-chip">[ ⚡ 60 FPS WEBGL ]</span>
                             <span class="highlight-chip">[ ⚡ WEBSOCKET STATE ]</span>
@@ -939,9 +968,13 @@
                 </div>
                 <div class="project-details">
                     <div>
-                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">DESIGN SYSTEM // UI LIBRARY</div>
+                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">DESIGN SYSTEM // UI
+                            LIBRARY</div>
                         <h3>#02 // NOVA UI KIT</h3>
-                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">A modular, accessible neobrutalist component library engineered from scratch with vanilla CSS and JavaScript. Includes focus-trapped dialogs, accessible tabs, and fluid clamp() typography without framework bloat.</p>
+                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">A modular, accessible
+                            neobrutalist component library engineered from scratch with vanilla CSS and JavaScript.
+                            Includes focus-trapped dialogs, accessible tabs, and fluid clamp() typography without
+                            framework bloat.</p>
                         <div class="project-highlights">
                             <span class="highlight-chip">[ ♿ WCAG 2.1 AA ]</span>
                             <span class="highlight-chip">[ 📦 0 DEPENDENCIES ]</span>
@@ -986,9 +1019,13 @@
                 </div>
                 <div class="project-details">
                     <div>
-                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">PORTFOLIO INSTANCE // CORE</div>
+                        <div style="margin-bottom:8px;font-weight:bold;color:var(--secondary);">PORTFOLIO INSTANCE //
+                            CORE</div>
                         <h3>#03 // THIS PORTFOLIO</h3>
-                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">High-performance personal developer portfolio built with semantic HTML, custom CSS tokens, and JavaScript. Integrates interactive Three.js 3D controls, a synthesized Web Audio engine, a live terminal CLI, and EmailJS dispatch.</p>
+                        <p class="project-desc" style="margin-top:8px;margin-bottom:12px;">High-performance personal
+                            developer portfolio built with semantic HTML, custom CSS tokens, and JavaScript. Integrates
+                            interactive Three.js 3D controls, a synthesized Web Audio engine, a live terminal CLI, and
+                            EmailJS dispatch.</p>
                         <div class="project-highlights">
                             <span class="highlight-chip">[ ⚡ 99 LIGHTHOUSE ]</span>
                             <span class="highlight-chip">[ 🎨 THREE.JS ENGINE ]</span>
@@ -1105,26 +1142,35 @@
         <section id="terminal-contact" data-reveal>
             <div class="terminal-window">
                 <div class="terminal-title">
-                    <span>$ rahul@portfolio:~$ ./contact.sh --role="Frontend Developer"</span>
-                    <span>[ AUTH: PUBLIC_KEY_OK ]</span>
+                    <span class="term-title-text">
+                        <span class="term-title-full">$ rahul@portfolio:~$ ./contact.sh --role="Frontend
+                            Developer"</span>
+                        <span class="term-title-short">$ ./contact.sh</span>
+                    </span>
+                    <span>[ AUTH: OK ]</span>
                 </div>
                 <div class="terminal-body">
                     <!-- INTERACTIVE DEVELOPER CONSOLE -->
                     <div class="terminal-cli-block">
                         <div class="terminal-cli-header">
                             <span>// INTERACTIVE DEV SHELL // TYPE 'help' OR COMMANDS</span>
-                            <button type="button" class="cli-clear-btn" id="cli-clear-btn" title="Clear console output">[ CLEAR ✕ ]</button>
+                            <button type="button" class="cli-clear-btn" id="cli-clear-btn"
+                                title="Clear console output">[ CLEAR ✕ ]</button>
                         </div>
                         <div class="terminal-cli-screen" id="cli-output" role="log" aria-live="polite">
-                            <div class="cli-row cli-welcome">// rahul_dev bash shell v2.4 initialized. System online.</div>
-                            <div class="cli-row cli-hint">Type <span class="cli-cmd-highlight">'help'</span> for available commands or execute dispatches below.</div>
+                            <div class="cli-row cli-welcome">// rahul_dev bash shell v2.4 initialized. System online.
+                            </div>
+                            <div class="cli-row cli-hint">Type <span class="cli-cmd-highlight">'help'</span> for
+                                available commands or execute dispatches below.</div>
                         </div>
                         <form id="cli-form" class="cli-form" onsubmit="return false;">
                             <label for="cli-input" class="cli-prompt-label">
                                 <span class="cli-prompt-full">rahul@portfolio:~$</span>
                                 <span class="cli-prompt-short">$</span>
                             </label>
-                            <input type="text" id="cli-input" class="cli-input" placeholder="try: help, skills, about, resume, theme, sudo hire rahul" autocomplete="off" spellcheck="false">
+                            <input type="text" id="cli-input" class="cli-input"
+                                placeholder="try: help, skills, about, resume, theme, sudo hire rahul"
+                                autocomplete="off" spellcheck="false">
                             <button type="submit" id="cli-run-btn" class="cli-run-btn">[ RUN ↵ ]</button>
                         </form>
                     </div>
@@ -1170,21 +1216,21 @@
                 <span class="footer-sub">Frontend Developer · New Delhi, India</span>
             </div>
             <div class="footer-links">
-                <a href="#hero">INDEX</a>
                 <a href="#about">ABOUT</a>
                 <a href="#skills">MATRIX</a>
                 <a href="#projects">ARCHIVE</a>
                 <a href="#terminal-contact">TERMINAL</a>
             </div>
             <div class="footer-right">
-                <span>© 2024 RAHUL BISWAL</span>
+                <span>© 2024 RAHUL KUMAR BISWAL</span>
             </div>
         </div>
         <div class="footer-bar">BUILT WITH HTML · CSS · JAVASCRIPT · THREE.JS // NO FRAMEWORK OVERHEAD</div>
     </footer>
 
     <!-- Floating Return-to-Start Button -->
-    <button id="btn-back-to-top" class="floating-top-btn" aria-label="Return to starting section" title="Return to start">
+    <button id="btn-back-to-top" class="floating-top-btn" aria-label="Return to starting section"
+        title="Return to start">
         <span class="floating-top-arrow">▲</span>
         <span class="floating-top-text">TOP</span>
     </button>

@@ -98,6 +98,18 @@
     const worldGroup = new THREE.Group();
     scene.add(worldGroup);
 
+    // 1. Dynamic Lighting (adds rich 3D volumetric depth)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.85);
+    dirLight.position.set(4, 5, 4);
+    scene.add(dirLight);
+
+    const pointLight = new THREE.PointLight(0xCCFF00, 1.8, 7);
+    pointLight.position.set(0, 0, 0);
+    worldGroup.add(pointLight);
+
     // Geometry presets
     const shapes = [
         {
@@ -146,25 +158,52 @@
     ring2.rotation.y = Math.PI / 4;
     worldGroup.add(ring2);
 
-    // Core octahedron
-    const coreMat = new THREE.MeshBasicMaterial({ color: 0xCCFF00 });
+    // Inner Core with faceted metallic shader
+    const coreMat = new THREE.MeshStandardMaterial({
+        color: 0xCCFF00,
+        roughness: 0.22,
+        metalness: 0.65,
+        flatShading: true
+    });
     let coreMesh = new THREE.Mesh(shapes[0].createCore(), coreMat);
     worldGroup.add(coreMesh);
 
-    // Floating particle dots
-    const particleCount = 65;
+    // Interactive Shockwave Ring (triggers on canvas click)
+    const shockwaveGeo = new THREE.RingGeometry(0.1, 0.16, 64);
+    const shockwaveMat = new THREE.MeshBasicMaterial({
+        color: 0xCCFF00,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0,
+        wireframe: true
+    });
+    const shockwaveMesh = new THREE.Mesh(shockwaveGeo, shockwaveMat);
+    shockwaveMesh.rotation.x = Math.PI / 2;
+    worldGroup.add(shockwaveMesh);
+    let shockwaveProgress = 1.0; // 0..1, 1 means idle
+
+    // Floating dynamic particle dots
+    const particleCount = 75;
     const particlePositions = new Float32Array(particleCount * 3);
+    const particleBaseData = [];
     for (let i = 0; i < particleCount; i++) {
-        const r = 2.4 + Math.random() * 1.2;
+        const r = 2.4 + Math.random() * 1.3;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
+        particleBaseData.push({
+            r: r,
+            theta: theta,
+            phi: phi,
+            speed: 0.9 + Math.random() * 0.9,
+            phase: Math.random() * Math.PI * 2
+        });
         particlePositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
         particlePositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
         particlePositions[i * 3 + 2] = r * Math.cos(phi);
     }
     const particleGeo = new THREE.BufferGeometry();
     particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-    const particleMat = new THREE.PointsMaterial({ color: 0xCCFF00, size: 0.045, transparent: true, opacity: 0.7 });
+    const particleMat = new THREE.PointsMaterial({ color: 0xCCFF00, size: 0.048, transparent: true, opacity: 0.75 });
     const particles = new THREE.Points(particleGeo, particleMat);
     worldGroup.add(particles);
 
@@ -175,6 +214,18 @@
         { label: 'AMBER', hex: 0xFF6B35 }
     ];
     let currentPaletteIdx = 0;
+
+    // Pulse trigger and Living Core state
+    let pulseScale = 0.0;
+    function triggerCanvasShockwave() {
+        shockwaveProgress = 0.0;
+        pulseScale = 0.32;
+        if (window.playTerminalSFX) window.playTerminalSFX('keydown');
+    }
+    container.addEventListener('click', triggerCanvasShockwave);
+    window.pulseHeroSimulation = function () {
+        pulseScale = 0.26;
+    };
 
     // Controls setup
     const shapeBtn = document.getElementById('canvas-shape-btn');
@@ -187,6 +238,7 @@
             coreMesh.geometry.dispose();
             coreMesh.geometry = currentPreset.createCore();
             shapeBtn.textContent = '[ GEOMETRY: ' + currentPreset.name + ' ]';
+            pulseScale = 0.25;
         });
     }
 
@@ -196,6 +248,7 @@
             isWireframe = !isWireframe;
             cageMat.wireframe = isWireframe;
             wireBtn.textContent = isWireframe ? '[ WIRE: ON ]' : '[ WIRE: OFF ]';
+            pulseScale = 0.2;
         });
     }
 
@@ -204,6 +257,7 @@
         speedBtn.addEventListener('click', function () {
             speedMultiplier = speedMultiplier === 1.0 ? 2.5 : 1.0;
             speedBtn.textContent = speedMultiplier === 1.0 ? '[ SPD: 1X ]' : '[ SPD: 2.5X ]';
+            pulseScale = 0.2;
         });
     }
 
@@ -216,7 +270,10 @@
             ring1Mat.color.setHex(p.hex);
             ring2Mat.color.setHex(p.hex);
             particleMat.color.setHex(p.hex);
+            pointLight.color.setHex(p.hex);
+            shockwaveMat.color.setHex(p.hex);
             colorBtn.textContent = '[ COLOR: ' + p.label + ' ]';
+            pulseScale = 0.3;
         });
     }
 
@@ -244,11 +301,32 @@
     }
     window.addEventListener('resize', onWindowResize);
 
+    // Battery & GPU Optimization via IntersectionObserver
+    let isHeroVisible = true;
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                isHeroVisible = entry.isIntersecting;
+            });
+        }, { threshold: 0.05 });
+        observer.observe(container);
+    }
+
     const clock = new THREE.Clock();
+    let lastTime = 0;
+
     function animate() {
         requestAnimationFrame(animate);
-        const elapsed = clock.getElapsedTime() * speedMultiplier;
 
+        // Pause GPU pipeline when hero is off-screen
+        if (!isHeroVisible) return;
+
+        const totalElapsed = clock.getElapsedTime();
+        const delta = Math.min(totalElapsed - lastTime, 0.1);
+        lastTime = totalElapsed;
+        const elapsed = totalElapsed * speedMultiplier;
+
+        // Rotations
         cageMesh.rotation.x  = elapsed * 0.25;
         cageMesh.rotation.y  = elapsed * 0.35;
         coreMesh.rotation.x  = -elapsed * 0.4;
@@ -257,6 +335,34 @@
         ring2.rotation.z     = -elapsed * 0.15;
         particles.rotation.y = elapsed * 0.08;
 
+        // Harmonic breathing & interactive pulse
+        pulseScale *= 0.91;
+        const breath = 1.0 + Math.sin(elapsed * 2.6) * 0.07;
+        const currentScale = Math.max(0.6, breath + pulseScale);
+        coreMesh.scale.set(currentScale, currentScale, currentScale);
+
+        // Fluid particle wave dynamics
+        const posAttr = particleGeo.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+            const p = particleBaseData[i];
+            const currentR = p.r + Math.sin(elapsed * p.speed + p.phase) * 0.16;
+            posAttr[i * 3]     = currentR * Math.sin(p.phi) * Math.cos(p.theta);
+            posAttr[i * 3 + 1] = currentR * Math.sin(p.phi) * Math.sin(p.theta);
+            posAttr[i * 3 + 2] = currentR * Math.cos(p.phi);
+        }
+        particleGeo.attributes.position.needsUpdate = true;
+
+        // Shockwave expansion & decay
+        if (shockwaveProgress < 1.0) {
+            shockwaveProgress += delta * 2.2;
+            const swScale = 1.0 + shockwaveProgress * 24;
+            shockwaveMesh.scale.set(swScale, swScale, 1.0);
+            shockwaveMat.opacity = Math.max(0, 0.85 * (1.0 - shockwaveProgress));
+        } else {
+            shockwaveMat.opacity = 0;
+        }
+
+        // Pointer lerp smoothing
         targetX += (mouseX * 0.6 - targetX) * 0.08;
         targetY += (mouseY * 0.6 - targetY) * 0.08;
         worldGroup.rotation.y = targetX;
@@ -336,6 +442,67 @@
     bars.forEach(function (b) { io.observe(b); });
 })();
 
+/* ---- STATS COUNTER ANIMATION (scroll-triggered) ---- */
+(function () {
+    var statNums = document.querySelectorAll('.about-stat-num[data-target]');
+    if (!statNums.length) return;
+
+    var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function animateCounter(el) {
+        var target = parseInt(el.getAttribute('data-target'), 10);
+        if (isNaN(target)) return;
+        var prefix = el.getAttribute('data-prefix') || '';
+        var suffix = el.getAttribute('data-suffix') || '';
+
+        if (prefersReduced) {
+            el.textContent = prefix + target + suffix;
+            return;
+        }
+
+        var duration = 950;
+        var startVal = 0;
+        var startTime = null;
+
+        function easeOutExpo(t) {
+            return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        }
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            var elapsed = timestamp - startTime;
+            var progress = Math.min(elapsed / duration, 1);
+            var current = Math.round(startVal + (target - startVal) * easeOutExpo(progress));
+            el.textContent = prefix + current + suffix;
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                el.textContent = prefix + target + suffix;
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    var statsContainer = document.querySelector('.about-stats');
+    if (!statsContainer) return;
+
+    if (!('IntersectionObserver' in window)) {
+        statNums.forEach(animateCounter);
+        return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                statNums.forEach(animateCounter);
+                io.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.25 });
+
+    io.observe(statsContainer);
+})();
+
 /* ---- SCROLL-SPY NAV ---- */
 (function () {
     var spyLinks = document.querySelectorAll('.nav-spy');
@@ -398,10 +565,22 @@
     var stored = localStorage.getItem('rahul-theme');
     if (stored === 'dark') root.classList.add('dark-mode');
 
+    function updateThemeUI() {
+        if (!btn) return;
+        var isDark = root.classList.contains('dark-mode');
+        var full = btn.querySelector('.btn-text-full');
+        var short = btn.querySelector('.btn-text-short');
+        if (full) full.textContent = isDark ? '[ ☼ LIGHT ]' : '[ ◐ DARK ]';
+        if (short) short.textContent = isDark ? '☼' : '◐';
+        btn.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+    updateThemeUI();
+
     if (btn) {
         btn.addEventListener('click', function () {
             var isDark = root.classList.toggle('dark-mode');
             localStorage.setItem('rahul-theme', isDark ? 'dark' : 'light');
+            updateThemeUI();
         });
     }
 })();
@@ -465,7 +644,8 @@
 /* ---- SYNTHESIZED MECHANICAL AUDIO (SFX) ---- */
 (function () {
     var sfxBtn = document.getElementById('sfx-toggle');
-    var isSfxEnabled = localStorage.getItem('rahul-sfx') === 'true';
+    var savedSfx = localStorage.getItem('rahul-sfx');
+    var isSfxEnabled = savedSfx === null ? true : (savedSfx === 'true');
     var audioCtx = null;
 
     function initAudioContext() {
@@ -482,33 +662,59 @@
             if (!audioCtx) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
 
-            var osc = audioCtx.createOscillator();
-            var gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
             var now = audioCtx.currentTime;
-            var freq = type === 'keydown' ? (750 + Math.random() * 150) : (450 + Math.random() * 80);
+
+            // Master volume gain - substantially boosted for clear, punchy audibility
+            var masterGain = audioCtx.createGain();
+            masterGain.gain.setValueAtTime(0.42, now);
+            masterGain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+            masterGain.connect(audioCtx.destination);
+
+            // 1. Resonant switch body tone (bottom-out thud)
+            var osc = audioCtx.createOscillator();
+            var oscGain = audioCtx.createGain();
+            var baseFreq = type === 'keydown' ? (920 + Math.random() * 220) : (580 + Math.random() * 120);
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, now);
-            osc.frequency.exponentialRampToValueAtTime(120, now + 0.03);
-
-            gain.gain.setValueAtTime(0.08, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
-
+            osc.frequency.setValueAtTime(baseFreq, now);
+            osc.frequency.exponentialRampToValueAtTime(110, now + 0.045);
+            oscGain.gain.setValueAtTime(0.85, now);
+            oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.055);
+            osc.connect(oscGain);
+            oscGain.connect(masterGain);
             osc.start(now);
-            osc.stop(now + 0.04);
+            osc.stop(now + 0.065);
+
+            // 2. High-frequency crisp tactile snap (switch actuation click)
+            var snapOsc = audioCtx.createOscillator();
+            var snapGain = audioCtx.createGain();
+            snapOsc.type = 'sine';
+            snapOsc.frequency.setValueAtTime(type === 'keydown' ? 2400 : 1700, now);
+            snapOsc.frequency.exponentialRampToValueAtTime(320, now + 0.02);
+            snapGain.gain.setValueAtTime(0.7, now);
+            snapGain.gain.exponentialRampToValueAtTime(0.01, now + 0.025);
+            snapOsc.connect(snapGain);
+            snapGain.connect(masterGain);
+            snapOsc.start(now);
+            snapOsc.stop(now + 0.03);
         } catch (e) {}
     }
 
     function updateSfxButtonUI() {
         if (!sfxBtn) return;
+        var full = sfxBtn.querySelector('.btn-text-full');
+        var short = sfxBtn.querySelector('.btn-text-short');
         if (isSfxEnabled) {
-            sfxBtn.textContent = '[ 🔊 SFX: ON ]';
+            if (full) full.textContent = '[ 🔊 SFX: ON ]';
+            if (short) short.textContent = '🔊';
+            if (!full && !short) sfxBtn.textContent = '[ 🔊 SFX: ON ]';
             sfxBtn.classList.add('sfx-enabled');
+            sfxBtn.setAttribute('title', 'Mechanical Sound Effects: ON');
         } else {
-            sfxBtn.textContent = '[ 🔈 SFX: OFF ]';
+            if (full) full.textContent = '[ 🔈 SFX: OFF ]';
+            if (short) short.textContent = '🔈';
+            if (!full && !short) sfxBtn.textContent = '[ 🔈 SFX: OFF ]';
             sfxBtn.classList.remove('sfx-enabled');
+            sfxBtn.setAttribute('title', 'Mechanical Sound Effects: OFF');
         }
     }
 
@@ -649,6 +855,7 @@
         handleCommand(val);
         cliInput.value = '';
         if (window.playTerminalSFX) window.playTerminalSFX('keydown');
+        if (window.pulseHeroSimulation) window.pulseHeroSimulation();
     });
 
     cliInput.addEventListener('keydown', function (e) {
