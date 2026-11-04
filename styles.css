@@ -49,6 +49,28 @@ html {
   box-sizing: border-box;
 }
 
+/* ==========================================================================
+   CYBERNETIC SCROLL PROGRESS BAR
+   ========================================================================== */
+.scroll-progress-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: var(--primary-container);
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.75), 0 0 20px rgba(204, 255, 0, 0.4);
+  z-index: 10001;
+  pointer-events: none;
+  transform-origin: left;
+  transition: width 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.dark-mode .scroll-progress-line {
+  background: #ccff00;
+  box-shadow: 0 0 12px #ccff00, 0 0 24px rgba(204, 255, 0, 0.5);
+}
+
 body {
   background-color: var(--surface-container-low);
   color: var(--on-surface);
@@ -2298,6 +2320,21 @@ html.dark-mode .social-card--accent {
   line-height: 1;
 }
 
+.floating-top-pct {
+  font-family: var(--font-code);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--secondary);
+  border-left: 1.5px solid var(--outline-variant);
+  padding-left: 6px;
+  line-height: 1;
+}
+
+html.dark-mode .floating-top-pct {
+  color: #ccff00;
+  border-left-color: rgba(204, 255, 0, 0.35);
+}
+
 html.dark-mode .floating-top-btn {
   background-color: var(--surface-container-high);
   color: var(--on-surface);
@@ -2317,6 +2354,11 @@ html.dark-mode .floating-top-btn:hover {
     right: 1.25rem;
     padding: 6px 10px;
     font-size: 0.7rem;
+    gap: 4px;
+  }
+  .floating-top-pct {
+    font-size: 0.62rem;
+    padding-left: 4px;
   }
 }
 
@@ -2404,10 +2446,16 @@ html.dark-mode .floating-top-btn:hover {
   [data-reveal],
   [data-reveal='left'],
   [data-reveal='right'],
-  [data-reveal='scale'] {
+  [data-reveal='scale'],
+  .timeline-item {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+    filter: none !important;
+  }
+
+  .scroll-progress-line {
+    display: none !important;
   }
 
   .skill-bar-fill {

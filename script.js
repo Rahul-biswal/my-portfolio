@@ -355,14 +355,20 @@
         lastTime = totalElapsed;
         const elapsed = totalElapsed * speedMultiplier;
 
-        // Rotations
-        cageMesh.rotation.x  = elapsed * 0.25;
-        cageMesh.rotation.y  = elapsed * 0.35;
-        coreMesh.rotation.x  = -elapsed * 0.4;
-        coreMesh.rotation.z  = elapsed * 0.5;
-        ring1.rotation.z     = elapsed * 0.2;
-        ring2.rotation.z     = -elapsed * 0.15;
-        particles.rotation.y = elapsed * 0.08;
+        // Smooth scroll-driven 3D parallax coupling
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop || 0;
+        const scrollFactor = currentScroll * 0.002;
+
+        // Rotations with dynamic scroll parallax
+        cageMesh.rotation.x  = elapsed * 0.25 + scrollFactor * 0.9;
+        cageMesh.rotation.y  = elapsed * 0.35 + scrollFactor * 1.3;
+        coreMesh.rotation.x  = -elapsed * 0.4 - scrollFactor * 0.6;
+        coreMesh.rotation.z  = elapsed * 0.5 + scrollFactor * 0.8;
+        ring1.rotation.x     = scrollFactor * 0.5;
+        ring1.rotation.z     = elapsed * 0.2 + scrollFactor;
+        ring2.rotation.y     = scrollFactor * 0.4;
+        ring2.rotation.z     = -elapsed * 0.15 - scrollFactor * 0.9;
+        particles.rotation.y = elapsed * 0.08 + scrollFactor * 0.3;
 
         // Harmonic breathing & interactive pulse
         pulseScale *= 0.91;
@@ -442,6 +448,7 @@
     var items = document.querySelectorAll('[data-reveal]');
     if (!items.length) return;
 
+    var isMobile = window.innerWidth <= 768;
     var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {
@@ -449,7 +456,10 @@
                 io.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
+    }, { 
+        threshold: isMobile ? 0.05 : 0.10,
+        rootMargin: isMobile ? '0px 0px -20px 0px' : '0px 0px -40px 0px' 
+    });
 
     items.forEach(function (el) { io.observe(el); });
 })();
@@ -559,10 +569,48 @@
     updateSpy();
 })();
 
-/* ---- RETURN TO START / TOP HANDLERS ---- */
+/* ---- CYBERNETIC SCROLL PROGRESS & FLOATING HUD ---- */
 (function () {
+    var progressLine = document.getElementById('scroll-progress-line');
     var backToTopBtn = document.getElementById('btn-back-to-top');
+    var scrollPctBadge = document.getElementById('scroll-pct-badge');
     var brandLogo = document.getElementById('brand-logo');
+    var ticking = false;
+
+    function updateScrollProgress() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        var clamped = Math.min(Math.max(progress, 0), 100);
+
+        if (progressLine) {
+            progressLine.style.width = clamped.toFixed(1) + '%';
+        }
+
+        if (scrollPctBadge) {
+            scrollPctBadge.textContent = '[ ' + Math.round(clamped) + '% ]';
+        }
+
+        if (backToTopBtn) {
+            if (scrollTop > 240) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }
+
+        ticking = false;
+    }
+
+    function onScroll() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateScrollProgress);
+            ticking = true;
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    updateScrollProgress();
 
     function scrollToTop(e) {
         if (e) e.preventDefault();
@@ -570,21 +618,52 @@
     }
 
     if (backToTopBtn) {
-        function toggleFloatingBtn() {
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        }
-        window.addEventListener('scroll', toggleFloatingBtn, { passive: true });
-        toggleFloatingBtn();
         backToTopBtn.addEventListener('click', scrollToTop);
     }
-
     if (brandLogo) {
         brandLogo.addEventListener('click', scrollToTop);
     }
+})();
+
+/* ---- SMOOTH IN-PAGE ANCHOR SCROLLING WITH HEADER OFFSET ---- */
+(function () {
+    var anchors = document.querySelectorAll('a[href^="#"]');
+    anchors.forEach(function (anchor) {
+        anchor.addEventListener('click', function (e) {
+            var href = this.getAttribute('href');
+            if (!href || href === '#' || href === '#!') return;
+            var target = document.querySelector(href);
+            if (!target) return;
+
+            e.preventDefault();
+            var header = document.querySelector('.header');
+            var headerHeight = header ? header.offsetHeight : 68;
+            var elementPosition = target.getBoundingClientRect().top;
+            var offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+
+            window.scrollTo({
+                top: Math.max(0, offsetPosition),
+                behavior: 'smooth'
+            });
+
+            // Auto-close mobile navigation drawer if open
+            var navLinks = document.getElementById('nav-links');
+            var menuToggle = document.getElementById('menu-toggle');
+            if (navLinks && navLinks.classList.contains('nav-open')) {
+                navLinks.classList.remove('nav-open');
+                if (menuToggle) {
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    var icon = menuToggle.querySelector('.menu-icon');
+                    if (icon) {
+                        var full = icon.querySelector('.btn-text-full');
+                        var short = icon.querySelector('.btn-text-short');
+                        if (full) full.textContent = '[ MENU ☰ ]';
+                        if (short) short.textContent = '☰';
+                    }
+                }
+            }
+        });
+    });
 })();
 
 /* ---- DARK MODE TOGGLE ---- */
@@ -793,6 +872,7 @@
         help: function () {
             return '<div class="cli-output-line">AVAILABLE COMMANDS:\n' +
                    '  • <strong>about</strong>      : Developer background & profile\n' +
+                   '  • <strong>education</strong>  : Academic history & qualifications\n' +
                    '  • <strong>skills</strong>     : Technical competencies & stack\n' +
                    '  • <strong>projects</strong>   : Selected portfolio projects\n' +
                    '  • <strong>resume</strong>     : Open/download resume (PDF)\n' +
@@ -804,9 +884,17 @@
         },
         about: function () {
             return '<div class="cli-output-line">RAHUL BISWAL // FRONTEND DEVELOPER\n' +
-                   'Education: CS Graduate (2024)\n' +
+                   'Education: BCA - Indira Gandhi National Open University (2017-2021) | CGPA: 6.1\n' +
                    'Location:  New Delhi, India\n' +
                    'Focus:     Fast, accessible, and delightful web interfaces with React, modern CSS, and JavaScript.</div>';
+        },
+        education: function () {
+            return '<div class="cli-output-line">ACADEMIC CREDENTIALS:\n' +
+                   '  • Degree     : BCA (Bachelor of Computer Applications)\n' +
+                   '  • University : Indira Gandhi National Open University (IGNOU)\n' +
+                   '  • Period     : 2017 — 2021\n' +
+                   '  • Score      : 6.1 CGPA\n' +
+                   '  • Focus      : Software Engineering, DBMS, Data Structures & Web Development</div>';
         },
         skills: function () {
             return '<div class="cli-output-line">CORE CAPABILITIES:\n' +

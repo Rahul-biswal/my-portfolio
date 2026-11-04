@@ -6,19 +6,64 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Rahul Kumar Biswal — Frontend Developer Portfolio</title>
     <meta name="description"
-        content="Rahul Kumar Biswal is a 2024 BCA graduate and frontend developer based in New Delhi, specialising in React, Three.js, and modern web UI. Open to entry-level roles and internships.">
-    <!-- Open Graph -->
+        content="Rahul Kumar Biswal is a BCA graduate (IGNOU) & frontend developer in New Delhi, building fast, accessible web UI with React & Three.js. Open to work.">
+    <meta name="author" content="Rahul Kumar Biswal">
+    <meta name="keywords" content="Rahul Kumar Biswal, Frontend Developer, React 19, Three.js, WebGL, Next.js, JavaScript, BCA IGNOU, Portfolio, New Delhi">
+    <meta name="theme-color" content="#1a1c1a">
+    <link rel="canonical" href="https://rahul-biswal.github.io/my-portfolio/">
+
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Rahul Kumar Biswal Portfolio">
+    <meta property="og:locale" content="en_US">
     <meta property="og:title" content="Rahul Kumar Biswal — Frontend Developer">
     <meta property="og:description"
-        content="2024 BCA grad building beautiful, fast, and accessible web experiences. React · Three.js · Next.js. Open to work.">
-    <meta property="og:url" content="https://rahulbiswal.dev">
-    <meta property="og:image"
-        content="https://og-image-placeholder.vercel.app/Rahul%20Kumar%20Biswal%20%E2%80%94%20Frontend%20Developer.png">
-    <!-- Twitter Card -->
+        content="BCA graduate (IGNOU) building fast, accessible web UI with React, Three.js & modern CSS. Open for entry-level roles & internships.">
+    <meta property="og:url" content="https://rahul-biswal.github.io/my-portfolio/">
+    <meta property="og:image" content="https://rahul-biswal.github.io/my-portfolio/og-image.png">
+    <meta property="og:image:secure_url" content="https://rahul-biswal.github.io/my-portfolio/og-image.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Rahul Kumar Biswal — Frontend Developer Portfolio Preview">
+
+    <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@Rahulku89844866">
+    <meta name="twitter:creator" content="@Rahulku89844866">
     <meta name="twitter:title" content="Rahul Kumar Biswal — Frontend Developer">
-    <meta name="twitter:description" content="2024 BCA grad building beautiful, fast, and accessible web experiences.">
+    <meta name="twitter:description"
+        content="BCA graduate (IGNOU) building beautiful, fast, and accessible web experiences with React, Three.js, and modern CSS.">
+    <meta name="twitter:image" content="https://rahul-biswal.github.io/my-portfolio/og-image.png">
+    <meta name="twitter:image:alt" content="Rahul Kumar Biswal — Frontend Developer Portfolio Preview">
+
+    <!-- Structured Data (JSON-LD) for Search & Social Indexing -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Rahul Kumar Biswal",
+      "jobTitle": "Frontend Developer",
+      "url": "https://rahul-biswal.github.io/my-portfolio/",
+      "image": "https://rahul-biswal.github.io/my-portfolio/og-image.png",
+      "sameAs": [
+        "https://github.com/Rahul-biswal",
+        "https://www.linkedin.com/in/rahulkumarbiswal",
+        "https://x.com/Rahulku89844866"
+      ],
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Indira Gandhi National Open University",
+        "alternateName": "IGNOU"
+      },
+      "knowsAbout": ["React", "JavaScript", "TypeScript", "Three.js", "Next.js", "HTML5", "CSS3", "UI/UX Design"],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "New Delhi",
+        "addressCountry": "India"
+      }
+    }
+    </script>
     <!-- Favicon -->
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231a1c1a'/><text y='72' x='12' font-size='72' font-family='monospace' font-weight='bold' fill='%23ccff00'>R</text></svg>">
@@ -32,53 +77,101 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* ===== SCROLL REVEAL ===== */
+        /* ===== KINETIC SCROLL REVEAL SYSTEM ===== */
         [data-reveal] {
             opacity: 0;
-            transform: translateY(32px);
-            transition: opacity 0.55s cubic-bezier(.22, 1, .36, 1), transform 0.55s cubic-bezier(.22, 1, .36, 1);
+            transform: translate3d(0, 36px, 0) scale(0.97);
+            filter: blur(2px);
+            will-change: transform, opacity, filter;
+            transition: 
+                opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         [data-reveal='left'] {
-            transform: translateX(-32px);
+            transform: translate3d(-36px, 16px, 0) rotate(-1deg) scale(0.96);
         }
 
         [data-reveal='right'] {
-            transform: translateX(32px);
+            transform: translate3d(36px, 16px, 0) rotate(1deg) scale(0.96);
         }
 
         [data-reveal='scale'] {
-            transform: scale(0.94) translateY(16px);
+            transform: scale3d(0.90, 0.90, 1) translate3d(0, 24px, 0);
         }
 
         [data-reveal].revealed {
             opacity: 1 !important;
-            transform: none !important;
+            transform: translate3d(0, 0, 0) rotate(0deg) scale3d(1, 1, 1) !important;
+            filter: blur(0) !important;
         }
 
-        /* stagger siblings */
-        [data-delay='100'] {
-            transition-delay: 0.10s;
+        /* Stagger Delays */
+        [data-delay='100'] { transition-delay: 0.08s; }
+        [data-delay='200'] { transition-delay: 0.16s; }
+        [data-delay='300'] { transition-delay: 0.24s; }
+        [data-delay='400'] { transition-delay: 0.32s; }
+        [data-delay='500'] { transition-delay: 0.40s; }
+        [data-delay='600'] { transition-delay: 0.48s; }
+
+        /* Section Header laser indicator on scroll */
+        .section-header {
+            position: relative;
+        }
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--primary-container);
+            box-shadow: 0 0 10px rgba(204, 255, 0, 0.85);
+            transition: width 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+            pointer-events: none;
+        }
+        .section-header.revealed::after {
+            width: 100%;
         }
 
-        [data-delay='200'] {
-            transition-delay: 0.20s;
+        /* Timeline Items Waterfall */
+        .timeline-item {
+            opacity: 0;
+            transform: translate3d(-18px, 0, 0);
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .timeline.revealed .timeline-item {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+        .timeline.revealed .timeline-item:nth-child(2) { transition-delay: 0.12s; }
+        .timeline.revealed .timeline-item:nth-child(3) { transition-delay: 0.24s; }
+        .timeline.revealed .timeline-item:nth-child(4) { transition-delay: 0.36s; }
+        .timeline.revealed .timeline-item:nth-child(5) { transition-delay: 0.48s; }
+
+        .timeline.revealed .timeline-dot {
+            animation: dotIlluminate 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes dotIlluminate {
+            0% { transform: scale(0.6); box-shadow: 0 0 0 rgba(204, 255, 0, 0); }
+            50% { transform: scale(1.3); box-shadow: 0 0 12px #ccff00; }
+            100% { transform: scale(1); }
         }
 
-        [data-delay='300'] {
-            transition-delay: 0.30s;
-        }
-
-        [data-delay='400'] {
-            transition-delay: 0.40s;
-        }
-
-        [data-delay='500'] {
-            transition-delay: 0.50s;
-        }
-
-        [data-delay='600'] {
-            transition-delay: 0.60s;
+        /* Mobile specific optimization for silky touch scroll */
+        @media (max-width: 768px) {
+            [data-reveal],
+            [data-reveal='left'],
+            [data-reveal='right'],
+            [data-reveal='scale'] {
+                transform: translate3d(0, 22px, 0) scale(0.98);
+                filter: blur(1px);
+                transition-duration: 0.5s;
+            }
+            .timeline-item {
+                transform: translate3d(0, 12px, 0);
+            }
         }
 
         /* ===== LOADER ===== */
@@ -476,6 +569,9 @@
         </div>
     </div>
     <!-- ===== /LOADING SCREEN ===== -->
+    <!-- Cybernetic Scroll Progress Bar -->
+    <div id="scroll-progress-line" class="scroll-progress-line" aria-hidden="true"></div>
+
     <header class="header">
         <div class="header-inner">
             <a href="#hero" class="logo" id="brand-logo" aria-label="Return to starting section"
@@ -534,7 +630,7 @@
                 </div>
                 <h1 data-reveal data-delay="200">FRONTEND DEVELOPER<br>FOR THE MODERN WEB</h1>
                 <p class="hero-desc" data-reveal data-delay="300">
-                    2024 CS Graduate who loves building beautiful, fast, and accessible web experiences.
+                    BCA Graduate (IGNOU) who loves building beautiful, fast, and accessible web experiences.
                     Focused on React, clean UI, and smooth interactions that users actually enjoy.
                 </p>
                 <div class="tech-chips" data-reveal data-delay="400">
@@ -591,7 +687,7 @@
         <section id="about" style="margin-bottom: var(--space-xl)">
             <div class="section-header" data-reveal>
                 <h2>[ 01 // ABOUT ME ]</h2>
-                <span>BOOT: 2024 // CS_GRAD</span>
+                <span>BOOT: 2021 // BCA_GRAD</span>
             </div>
             <div class="about-grid">
                 <!-- Bio card -->
@@ -600,8 +696,7 @@
                         <span class="card-header-badge card-header-badge--accent">DEV_PROFILE</span>
                         <span style="color:var(--secondary)">STATUS: ACTIVE</span>
                     </div>
-                    <p class="about-bio-text">Hey, I'm <strong>Rahul Biswal</strong> — a 2024 Computer Science graduate
-                        from New Delhi who fell in love with the frontend because that's where code meets people. I
+                    <p class="about-bio-text">Hey, I'm <strong>Rahul Biswal</strong> — a BCA graduate from Indira Gandhi National Open University (IGNOU) based in New Delhi who fell in love with the frontend because that's where code meets people. I
                         obsess over smooth hover states, accessible markup, and interfaces that feel <em>great</em> to
                         use.</p>
                     <p class="about-bio-text">When I'm not shipping components, I'm exploring Three.js experiments,
@@ -613,8 +708,8 @@
                             <span class="about-stat-label">PROJECTS</span>
                         </div>
                         <div class="about-stat">
-                            <span class="about-stat-num" data-target="2024">2024</span>
-                            <span class="about-stat-label">CS GRAD</span>
+                            <span class="about-stat-num" data-target="2021">2021</span>
+                            <span class="about-stat-label">BCA GRAD</span>
                         </div>
                         <div class="about-stat">
                             <span class="about-stat-num" data-prefix="<" data-target="24" data-suffix="H">&lt;24H</span>
@@ -655,11 +750,9 @@
                     <div class="timeline-item">
                         <div class="timeline-dot"></div>
                         <div class="timeline-content">
-                            <div class="timeline-date">2020 — 2024</div>
-                            <div class="timeline-title">B.TECH // COMPUTER SCIENCE &amp; ENGINEERING</div>
-                            <p class="timeline-desc">Graduated with honours. Focused on web technologies, data
-                                structures, and UI/UX design. Built my first React project in second year and never
-                                looked back.</p>
+                            <div class="timeline-date">2017 — 2021</div>
+                            <div class="timeline-title">BCA // INDIRA GANDHI NATIONAL OPEN UNIVERSITY</div>
+                            <p class="timeline-desc">Bachelor of Computer Applications (IGNOU) · CGPA: 6.1. Focused on software development, data structures, database management systems (DBMS), and web technologies.</p>
                         </div>
                     </div>
                     <div class="timeline-item">
@@ -1147,7 +1240,7 @@
                                 <span class="cli-prompt-short">$</span>
                             </label>
                             <input type="text" id="cli-input" class="cli-input"
-                                placeholder="try: help, skills, about, resume, theme, sudo hire rahul"
+                                placeholder="try: help, skills, about, education, resume, theme, sudo hire rahul"
                                 autocomplete="off" spellcheck="false">
                             <button type="submit" id="cli-run-btn" class="cli-run-btn">[ RUN ↵ ]</button>
                         </form>
@@ -1208,11 +1301,12 @@
         <div class="footer-bar">BUILT WITH HTML · CSS · JAVASCRIPT · THREE.JS // NO FRAMEWORK OVERHEAD</div>
     </footer>
 
-    <!-- Floating Return-to-Start Button -->
+    <!-- Floating Return-to-Start Button with Live Scroll Progress -->
     <button id="btn-back-to-top" class="floating-top-btn" aria-label="Return to starting section"
         title="Return to start">
         <span class="floating-top-arrow">▲</span>
         <span class="floating-top-text">TOP</span>
+        <span id="scroll-pct-badge" class="floating-top-pct">[ 0% ]</span>
     </button>
 
     <!-- CDN Dependencies -->
